@@ -1,6 +1,6 @@
 # givemoney
 
-> about money
+> about money  蓝色新分期淘
 
 ## Build Setup
 
