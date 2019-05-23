@@ -1,8 +1,8 @@
 <template>
-<!--  我的-->
+<!--  延期界面-->
 <div>
   <header-sub></header-sub>
-  wode
+  延期界面
   <footer-sub></footer-sub>
 </div>
 </template>

@@ -1,8 +1,8 @@
 <template>
-<!--  我的-->
+<!--  还款界面-->
 <div>
   <header-sub></header-sub>
-  wode
+  还款界面
   <footer-sub></footer-sub>
 </div>
 </template>

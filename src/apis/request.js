@@ -2,7 +2,6 @@ import axios from 'axios';
 // import Qs from 'qs'
 import { Toast } from 'vant';
 import { getCookie, setStore } from '@/utils/storage';
-import baseUrl from './baseurl';
 import router from '../router';
 
 const isAndroid = navigator.userAgent;
@@ -14,6 +13,7 @@ const httpClient = axios.create();
 // var cancel = null;
 httpClient.defaults.withCredentials = true;
 httpClient.defaults.timeout = 30000;
+httpClient.defaults.baseURL = process.env.BASE_URL;
 httpClient.interceptors.request.use(
   config => {
     const token = getCookie('Token');
@@ -58,7 +58,7 @@ export default {
   post (url, params) {
     return httpClient({
       method: 'post',
-      baseURL: process.env.BASE_URL,
+      // baseURL: process.env.BASE_URL,
       url,
       data: params,
       headers: { 'Content-Type': 'application/json; charset=utf-8' }
@@ -67,7 +67,7 @@ export default {
   filepost (url, params) {
     return httpClient({
       method: 'post',
-      baseURL: process.env.BASE_URL,
+      // baseURL: process.env.BASE_URL,
       url,
       // cancelToken: new CancelToken(function exector (c) {
       //   cancel = c;

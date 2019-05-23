@@ -1,11 +1,11 @@
 <template>
-    <section>
+    <div class="section">
       <div class="fixed">
         <van-icon name="arrow-left" class="back" v-if="!showBack" size="1em" @click="$router.go(-1)"/>
         {{headerTitle}}
       </div>
       <div class="slot"></div>
-    </section>
+    </div>
 </template>
 
 <script>
@@ -14,7 +14,7 @@
         name: "header",
       data(){
           return {
-            whiteList:['登录']
+            whiteList:['登录','首页','我的']
           }
       },
       components:{
@@ -34,16 +34,17 @@
 </script>
 
 <style scoped lang="scss">
-  section{
+  .section{
     line-height: 0.9rem;
     font-size: 0.36rem;
     text-align: center;
     color: #ffffff;
-    background-color: #2F81FF;
+    z-index: 22;
     .slot{
       height: 0.9rem;
     }
     .fixed{
+      background-color: #2F81FF !important;
       position: fixed;
       left: 0;
       top: 0;

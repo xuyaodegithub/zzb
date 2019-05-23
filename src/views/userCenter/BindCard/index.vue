@@ -1,8 +1,7 @@
 <template>
-<!--  我的-->
-<div>
+<!--  银行卡列表-->
+  <div>
   <header-sub></header-sub>
-  wode
   <footer-sub></footer-sub>
 </div>
 </template>

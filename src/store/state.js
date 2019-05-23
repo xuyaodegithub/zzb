@@ -3,7 +3,7 @@ const state={
 
   },
   page:{
-
+    authStatus: 0
   }
 }
 

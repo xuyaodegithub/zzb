@@ -1,8 +1,8 @@
 <template>
-<!--  我的-->
+<!--  我的贷款详情-->
 <div>
   <header-sub></header-sub>
-  wode
+  我的贷款详情
   <footer-sub></footer-sub>
 </div>
 </template>

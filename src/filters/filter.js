@@ -9,6 +9,10 @@ const lastfource = (val) => {
   let str = val.toString();
   return str.substring(str.length - 4);
 };
+//保留两位有效数字
+const twozero = (val) => {
+  return parseFloat(val).toFixed(2)
+};
 // 手机号码中间四位数星号表示
 const mobileFilter = mobile => {
   let reg = /^(.{3})(?:\d+)(.{4})$/;
@@ -40,6 +44,7 @@ const calcDaysFilter = (end, start) => {
 
 export {
   lastfource,
+  twozero,
   bankFilter,
   calcDaysFilter,
   mobileFilter,

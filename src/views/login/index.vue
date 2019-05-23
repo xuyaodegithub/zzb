@@ -3,13 +3,19 @@
       <header-sub></header-sub>
       <div class="logo">分期淘</div>
       <div class="content">
-        <input type="number" class="phone" placeholder="请输入手机号" v-model="phone" maxlength="11" @input="changeValve()">
+        <div class="relate">
+          <input type="number" class="phone" placeholder="请输入手机号" v-model="phone" maxlength="11" @input="changeValve()">
+          <img src="../../assets/image/clear.png" alt="" v-show="phone.length>0" @click="phone=''">
+        </div>
         <div class="flex a-i j-b">
-          <input type="number" placeholder="请输入验证码" v-model="code">
-          <button @click="sendCode()" :class="{'btnopa' : phone.length!=11}">发送验证码</button>
+          <div class="relate">
+            <input type="number" placeholder="请输入验证码" v-model="code">
+            <img src="../../assets/image/clear.png" alt="" v-show="code.length>0" @click="code=''">
+          </div>
+          <button @click="sendCode()" :class="{'btnopa' : phone.length!=11 || CountDown>0 }">{{CountDown>0 ? CountDown : '发送验证码'}}</button>
         </div>
         <p class="XY">登录即表示您同意 <span @click="check()"> 《分期淘服务协议》</span></p>
-        <div class="loginBtn" :class="{'loginactive' :phone.length!=11 || code.length!=6 }">
+        <div class="loginBtn" :class="{'loginactive' : !iscanLogin}" @click="userLogin()">
           登录
         </div>
       </div>
@@ -18,26 +24,53 @@
 
 <script>
   import headerSub from '@/components/header/index'
-  import { Dialog } from 'vant';
+  import { Dialog, Toast } from 'vant';
+  import { loginIn, sendMsg } from '@/apis/index';
+  import { setCookie, setStore, getStore } from '@/utils/storage.js';
     export default {
         name: "index",
       data(){
           return {
             phone:'',
-            code:''
+            code:'',
+            CountDown:0,
+            timer:null
           }
       },
       components:{
         headerSub,Dialog
       },
       mounted(){
-
+        this.getHistoryPhone()
       },
-      computed:{},
+      computed:{
+          iscanLogin(){
+            return this.phone.length===11 && this.code.length>=6
+          }
+      },
       methods:{
         sendCode(){
-          if(this.phone.length<11) return
-          alert(1)
+          if(this.phone.length<11 || this.CountDown>0 ) return
+          sendMsg(this.phone).then(res=>{
+            if (!res.resultCode) {
+              Toast(`已发送短信`);
+              // 发送短信
+              if (!this.timer) {
+                this.CountDown=60
+                this.timer = setInterval(() => {
+                  if (this.CountDown > 0) {
+                    this.CountDown--;
+                  } else {
+                    this.CountDown = 0;
+                    clearInterval(this.timer);
+                    this.timer = null;
+                  }
+                }, 1000);
+              }
+            } else {
+              Toast(`${res.resultMessage}`);
+            }
+          })
         },
         changeValve(){
           if(this.phone.length>11) this.phone=this.phone.slice(0,11)
@@ -51,6 +84,23 @@
           //   // on close
           // });
 
+        },
+        getHistoryPhone () {//获取历史登录手机
+          let phoneNum = getStore('phoneNum');
+          this.phone = phoneNum || this.phone;
+        },
+        userLogin(){
+          // if(!this.iscanLogin) return
+          // loginIn(this.phone, this.code).then(res=>{
+          //   if (!res.resultCode) {
+              this.$router.push('/home');
+          //     setCookie('Token', res.data.token);
+          //     setStore('name', res.data.name);
+          //     setStore('phoneNum', this.phone);
+          //   } else {
+          //     Toast(`${res.resultMessage}`);
+          //   }
+          // })
         }
       },
     }
@@ -73,25 +123,46 @@
     .content{
       font-size: 0.32rem;
       padding: 0 0.64rem;
-    }
-    .phone{
-      display: block;
-      width: 100%;
-      padding: 0.3rem 0;
-      border: none;
-      border-bottom: 1px solid #EAE8E8;
-      margin-bottom: 0.36rem;
+      input{
+        height: 0.5rem;
+        line-height: 0.5rem;
+        border: none;
+      }
+      .phone{
+        display: block;
+        width: 100%;
+        padding: 0.25rem 0;
+        border-bottom: 1px solid #EAE8E8;
+        margin-bottom: 0.36rem;
+      }
+      .relate{
+        position: relative;
+        img{
+          position: absolute;
+          right: 0.3rem;
+          top: 50%;
+          margin-top: -0.21rem;
+          width: 0.42rem;
+          height: 0.42rem;
+        }
+      }
     }
     .flex {
       padding: 0.15rem 0;
       border-bottom: 1px solid #EAE8E8;
-      input {
-        width: 60%;
+      div {
+        flex: 1;
         border: none;
+      }
+      input{
+        width: 100%;
       }
       button{
         font-size: 0.28rem;
-        padding: 0.16rem;
+        height: 0.72rem;
+        line-height: 0.72rem;
+        width: 1.72rem;
+        text-align: center;
         color: #ffffff;
         background-color: $bk;
         border-radius: 0.08rem;

@@ -31,12 +31,16 @@ const router = new Router({
       component:() => import(/* webpackChunkName: "login" */'@/views/signing/index')
     },{
       path: '/userCenter',
-      name: '用户中心',
+      name: '我的',
       component:() => import(/* webpackChunkName: "login" */'@/views/userCenter/index')
     },{
       path: '/serviceAgreement',
       name: '服务协议',
       component:() => import(/* webpackChunkName: "serviceAgreement" */'@/views/serviceAgreement/index')
+    },{
+      path: '/load',
+      name: '我的借款',
+      component:() => import(/* webpackChunkName: "serviceAgreement" */'@/views/userCenter/load/index')
     }
   ],
   scrollBehavior (to, from, savedPosition) {//路由切换时滚轮位置//scrollBehavior 方法接收 to 和 from 路由对象。第三个参数 savedPosition 当且仅当 popstate 导航 (通过浏览器的 前进/后退 按钮触发) 时才可用。
