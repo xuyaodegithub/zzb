@@ -1,9 +1,9 @@
 <template>
 <!--  还款界面-->
 <div>
-  <header-sub></header-sub>
+  <!--<header-sub></header-sub>-->
   还款界面
-  <footer-sub></footer-sub>
+  <!--<footer-sub></footer-sub>-->
 </div>
 </template>
 

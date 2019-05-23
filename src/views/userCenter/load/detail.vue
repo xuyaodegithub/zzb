@@ -1,9 +1,9 @@
 <template>
 <!--  我的贷款详情-->
 <div>
-  <header-sub></header-sub>
+  <!--<header-sub></header-sub>-->
   我的贷款详情
-  <footer-sub></footer-sub>
+  <!--<footer-sub></footer-sub>-->
 </div>
 </template>
 

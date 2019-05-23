@@ -1,9 +1,9 @@
 <template>
 <!--  我的-->
 <div>
-  <header-sub></header-sub>
+  <!--<header-sub></header-sub>-->
   wode
-  <footer-sub></footer-sub>
+  <!--<footer-sub></footer-sub>-->
 </div>
 </template>
 

@@ -32,7 +32,7 @@ httpClient.interceptors.response.use(
     const res = response.data;
     if (res.resultCode === 119) {
       router.replace({
-        path: '/login'
+        path: '/'
       });
       return Promise.reject(response);
     } else {

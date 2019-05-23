@@ -1,45 +1,39 @@
 <template>
 <!--  银行卡编辑解绑-->
-  <section>
-    <myHeader title="绑定银行卡"/>
-    <div class="item">
-      <div class="item-card" :style="style">
-          <div class="flex">
-            <img :src="banklist.logo" alt="" @error="catchErrorImage($event)">
-            <div class="title">
-              <p>{{banklist.bankName}}</p>
-              <p>{{banklist.type}}</p>
-            </div>
-          </div>
-        <div class="card-num">
-          <span>{{banklist.cardNo | bankFilter}}</span>
+  <div class="updataCard">
+    <div class="item flex" :style="style">
+        <div>
+          <p>{{item.title}}</p>
+          <p>储蓄卡</p>
+          <p>{{item.num | bankFilter}}</p>
         </div>
-      </div>
+        <div class="btn" @click="Unbind()">解绑</div>
     </div>
     <div class="flex btn">
       <div style="display:flex;align-items: center;">
-        <span style="margin-right: 10px;">设为默认卡</span>
+        <span style="margin-right: 10px;color: #2F81FF;">设为默认卡</span>
         <van-switch
           @change="open()"
           v-model="checked"
           size="20px"
-          active-color="rgb(7, 193, 96)"
-        /></div>
-      <div @click="Unbind()">解除绑定</div>
+          active-color="#2F81FF"
+        />
+      </div>
+      <!--<div @click="Unbind()">解除绑定</div>-->
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
-import { myHeader } from 'components/index';
 // import { orderstatusMatch } from 'utils/match';
 import { Row, Col, PasswordInput, NumberKeyboard, Popup, Dialog, Toast, Icon, Button, Switch } from 'vant';
 // import { getOrderInfo, loanPostpone } from 'apis/index';
 // import { getStore } from 'utils/storage.js';
-import back from 'img/back.png';
+import js from '@/assets/image/jianshe.png'
+import gs from '@/assets/image/gs.png'
+import ny from '@/assets/image/ny.png'
 export default {
   components: {
-    myHeader,
     [Row.name]: Row,
     [Col.name]: Col,
     [PasswordInput.name]: PasswordInput,
@@ -53,10 +47,10 @@ export default {
   },
   data () {
     return {
-      banklist: { bankName: '中国工商银行', cardNo: '123456789101111156', logo: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4168182961,2938928117&fm=27&gp=0.jpg', type: '借记卡' },
+      item:{type:1,title:'中国建设银行',num:'341125197809157070'},
       checked: false,
       style: {
-        'backgroundImage': `url(${back})`
+        'backgroundImage': `url(${js})`
       }
 
     };
@@ -65,9 +59,6 @@ export default {
 
   },
   methods: {
-    catchErrorImage (e) {
-      e.target.src = require('img/bank.jpg');
-    },
     Unbind () {
       let _self = this;
       Dialog.confirm({
@@ -91,44 +82,39 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
-  section
-    min-height 100%
-    background-color rgba(242, 242, 242, 1)
-  .item
-    padding 15px
-  .item-card
-    padding 30px
-    font-size 16px
-    background-color #fff
-    border-radius 10px
-    line-height 30px
-    background-repeat no-repeat
-    background-size cover
-    background-position center
-  .item-card img
-    width 60px
-    height 60px
-    border-radius 50%
-    margin-right 20px
-  .item-card .flex
-    display flex
-    align-items center
-  .card-num
-    margin-top 25px
-    font-size 24px
-    text-align center
-    color #ffffff
-    padding-bottom 20px
-  .btn.flex
-    display flex
-    align-items center
-    justify-content space-between
-    padding 15px 30px
-    font-size 16px
-    color #169BD5
-</style>
+<style lang="scss" scoped>
+.updataCard{
+  padding:.4rem .46rem;
+  .item{
+    padding: .44rem .26rem 1.1rem 1.3rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    /*background-position: center;*/
+    font-size: .34rem;
+    color: #fff;
+    line-height: .48rem;
+    justify-content: space-between;
+    margin-bottom: .4rem;
+    p:nth-child(2){
+      font-size: .22rem;
+      line-height: .32rem;
+      margin:.08rem 0 .12rem 0;
+    }
+    p:last-child{
+      font-size: .3rem;
+      line-height: .42rem;
+    }
+    .btn{
+      height: .6rem;
+      line-height: .6rem;
+      width: 1.24rem;
+      text-align: center;
+      border: 1px solid #fff;
+      border-radius: 0.1rem;
+    }
+  }
+}
 
-<style lang="stylus">
 
 </style>
+

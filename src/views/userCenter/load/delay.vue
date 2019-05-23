@@ -1,9 +1,9 @@
 <template>
 <!--  延期界面-->
 <div>
-  <header-sub></header-sub>
+  <!--<header-sub></header-sub>-->
   延期界面
-  <footer-sub></footer-sub>
+  <!--<footer-sub></footer-sub>-->
 </div>
 </template>
 

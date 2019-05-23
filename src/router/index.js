@@ -34,6 +34,14 @@ const router = new Router({
       name: '我的',
       component:() => import(/* webpackChunkName: "login" */'@/views/userCenter/index')
     },{
+      path: '/updataCard',
+      name: '我的银行卡',
+      component:() => import(/* webpackChunkName: "cardList" */'@/views/userCenter/updataCard/index')
+    },{
+      path: '/cardList',
+      name: '我的银行卡',
+      component:() => import(/* webpackChunkName: "cardList" */'@/views/userCenter/bindCard/index')
+    },{
       path: '/serviceAgreement',
       name: '服务协议',
       component:() => import(/* webpackChunkName: "serviceAgreement" */'@/views/serviceAgreement/index')

@@ -1,6 +1,6 @@
 <template>
   <section>
-    <header-sub></header-sub>
+    <!--<header-sub></header-sub>-->
     <div class="top" :style="style">
       <p class="title">借款金额(元)</p>
       <p class="num">{{currentProduct.loanAmount}}</p>
@@ -36,7 +36,7 @@
     <div class="btn-p">
       <div class="btn" @click="applyLoan()">申请借款</div>
     </div>
-    <footer-sub></footer-sub>
+    <!--<footer-sub></footer-sub>-->
   </section>
 </template>
 
@@ -108,39 +108,41 @@
           }
         });
       },
-    },
-    applyLoan() {
-      // this.$router.push('/userloaddetail/3');
-      let canApply = [0, 4].includes(this.loanOrderStatus); // 可以申请
-      let waitExam = [1, 2].includes(this.loanOrderStatus); // 等待审核
-      if (canApply) {
-        setStore('productId', this.currentProduct.productId);
-        if (this.authStatus !== '0') {
-          this.$router.push('/personInfo');
-        } else {
-          // this.$router.push({name: 'ID', query: {productId: this.currentProduct.productId}});
-          this.$router.push(`/ocrCard?productId=${this.currentProduct.productId}`);
+      applyLoan() {
+        // this.$router.push('/cardList');
+        let canApply = [0, 4].includes(this.loanOrderStatus); // 可以申请
+        let waitExam = [1, 2].includes(this.loanOrderStatus); // 等待审核
+        if (canApply) {
+          setStore('productId', this.currentProduct.productId);
+          if (this.authStatus !== '0') {
+            this.$router.push('/personInfo');
+          } else {
+            // this.$router.push({name: 'ID', query: {productId: this.currentProduct.productId}});
+            this.$router.push(`/ocrCard?productId=${this.currentProduct.productId}`);
+          }
+          return;
         }
-        return;
-      }
-      if (waitExam) {
-        Dialog.alert({
-          message: '您已申请借款,请耐心等待!'
-        }).then(() => {
-          this.$router.push('/load');
-        });
-        return;
-      }
-      if (this.loanOrderStatus === 3) {
-        Dialog.confirm({
-          message: '您还有未还款的订单，请先还款之后，再次申请借款。',
-          confirmButtonText: '去还款',
-          cancelButtonText: '我知道了'
-        }).then(() => {
-          this.$router.push('/load');
-        }).catch(() => {
-        });
-      }
+        if (waitExam) {
+          Dialog.alert({
+            message: '您已申请借款,请耐心等待!',
+            confirmButtonColor:'#2F81FF'
+          }).then(() => {
+            this.$router.push('/load');
+          });
+          return;
+        }
+        if (this.loanOrderStatus === 3) {
+          Dialog.confirm({
+            message: '您还有未还款的订单，请先还款之后，再次申请借款。',
+            confirmButtonText: '去还款',
+            cancelButtonText: '我知道了',
+            confirmButtonColor:'#2F81FF'
+          }).then(() => {
+            this.$router.push('/load');
+          }).catch(() => {
+          });
+        }
+      },
     },
   }
 </script>
@@ -149,7 +151,7 @@
   $back: #F6F6F6;
   $fs: #2F81FF;
   section {
-    min-height: 100%;
+    /*min-height: 100%;*/
     background-color: $back;
     color: #ffffff;
     padding-bottom: 1.5rem;

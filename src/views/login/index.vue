@@ -1,6 +1,6 @@
 <template>
     <section>
-      <header-sub></header-sub>
+      <!--<header-sub></header-sub>-->
       <div class="logo">分期淘</div>
       <div class="content">
         <div class="relate">
@@ -9,7 +9,7 @@
         </div>
         <div class="flex a-i j-b">
           <div class="relate">
-            <input type="number" placeholder="请输入验证码" v-model="code">
+            <input type="number" placeholder="请输入验证码" v-model="code" @blur="gotop()">
             <img src="../../assets/image/clear.png" alt="" v-show="code.length>0" @click="code=''">
           </div>
           <button @click="sendCode()" :class="{'btnopa' : phone.length!=11 || CountDown>0 }">{{CountDown>0 ? CountDown : '发送验证码'}}</button>
@@ -49,6 +49,9 @@
           }
       },
       methods:{
+        gotop(){
+          window.scrollTo(0,0)
+        },
         sendCode(){
           if(this.phone.length<11 || this.CountDown>0 ) return
           sendMsg(this.phone).then(res=>{
@@ -109,7 +112,7 @@
 <style scoped lang="scss">
   $bk:#2F81FF;
   section{
-    min-height: 100%;
+    /*min-height: 100%;*/
     .logo{
       width: 1.3rem;
       line-height: 1.3rem;

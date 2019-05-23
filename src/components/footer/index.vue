@@ -48,7 +48,7 @@
   color: #7B7B7B;
   padding: 0.18rem 1.6rem;
   line-height: 0.32rem;
-  z-index: 22;
+  z-index: 1111;
   div{
     min-width: 0.5rem;
     text-align: center;

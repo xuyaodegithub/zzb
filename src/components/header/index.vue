@@ -1,7 +1,7 @@
 <template>
     <div class="section">
       <div class="fixed">
-        <van-icon name="arrow-left" class="back" v-if="!showBack" size="1em" @click="$router.go(-1)"/>
+        <van-icon name="arrow-left" class="backGo" v-if="!showBack" size="1em" @click="$router.go(-1)"/>
         {{headerTitle}}
       </div>
       <div class="slot"></div>
@@ -39,7 +39,6 @@
     font-size: 0.36rem;
     text-align: center;
     color: #ffffff;
-    z-index: 22;
     .slot{
       height: 0.9rem;
     }
@@ -49,8 +48,9 @@
       left: 0;
       top: 0;
       width: 100%;
+      z-index: 999;
     }
-    .back{
+    .backGo{
       position: absolute;
       top: 50%;
       left: 0.32rem;

@@ -1,14 +1,26 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{'back' : $route.name=='登录'}">
+    <header-sub></header-sub>
     <transition name="slide">
       <router-view class="child"/>
     </transition>
+    <footerSub v-show="list.indexOf($route.name)>-1"></footerSub>
   </div>
 </template>
 
 <script>
+  import headerSub from '@/components/header/index'
+  import footerSub from '@/components/footer/index'
 export default {
-  name: 'App'
+  name: 'App',
+  data(){
+    return {
+      list:['首页','我的']
+    }
+  },
+  components:{
+    headerSub,footerSub
+  }
 }
 </script>
 
@@ -18,7 +30,10 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /*text-align: center;*/
-  height: 100%;
+  min-height: 100%;
+}
+.back{
+  background-color: #ffffff;
 }
 .slide-enter-active {
   transform: translateX(100%);
