@@ -93,17 +93,17 @@
           this.phone = phoneNum || this.phone;
         },
         userLogin(){
-          // if(!this.iscanLogin) return
-          // loginIn(this.phone, this.code).then(res=>{
-          //   if (!res.resultCode) {
+          if(!this.iscanLogin) return
+          loginIn(this.phone, this.code).then(res=>{
+            if (!res.resultCode) {
               this.$router.push('/home');
-          //     setCookie('Token', res.data.token);
-          //     setStore('name', res.data.name);
-          //     setStore('phoneNum', this.phone);
-          //   } else {
-          //     Toast(`${res.resultMessage}`);
-          //   }
-          // })
+              setCookie('Token', res.data.token);
+              setStore('name', res.data.name);
+              setStore('phoneNum', this.phone);
+            } else {
+              Toast(`${res.resultMessage}`);
+            }
+          })
         }
       },
     }
