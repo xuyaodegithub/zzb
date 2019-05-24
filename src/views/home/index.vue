@@ -109,39 +109,39 @@
         });
       },
       applyLoan() {
-        // this.$router.push('/cardList');
-        let canApply = [0, 4].includes(this.loanOrderStatus); // 可以申请
-        let waitExam = [1, 2].includes(this.loanOrderStatus); // 等待审核
-        if (canApply) {
-          setStore('productId', this.currentProduct.productId);
-          if (this.authStatus !== '0') {
-            this.$router.push('/personInfo');
-          } else {
-            // this.$router.push({name: 'ID', query: {productId: this.currentProduct.productId}});
-            this.$router.push(`/ocrCard?productId=${this.currentProduct.productId}`);
-          }
-          return;
-        }
-        if (waitExam) {
-          Dialog.alert({
-            message: '您已申请借款,请耐心等待!',
-            confirmButtonColor:'#2F81FF'
-          }).then(() => {
-            this.$router.push('/load');
-          });
-          return;
-        }
-        if (this.loanOrderStatus === 3) {
-          Dialog.confirm({
-            message: '您还有未还款的订单，请先还款之后，再次申请借款。',
-            confirmButtonText: '去还款',
-            cancelButtonText: '我知道了',
-            confirmButtonColor:'#2F81FF'
-          }).then(() => {
-            this.$router.push('/load');
-          }).catch(() => {
-          });
-        }
+        this.$router.push('/personInfo');
+        // let canApply = [0, 4].includes(this.loanOrderStatus); // 可以申请
+        // let waitExam = [1, 2].includes(this.loanOrderStatus); // 等待审核
+        // if (canApply) {
+        //   setStore('productId', this.currentProduct.productId);
+        //   if (this.authStatus !== '0') {
+        //     this.$router.push('/personInfo');
+        //   } else {
+        //     // this.$router.push({name: 'ID', query: {productId: this.currentProduct.productId}});
+        //     this.$router.push(`/ocrCard?productId=${this.currentProduct.productId}`);
+        //   }
+        //   return;
+        // }
+        // if (waitExam) {
+        //   Dialog.alert({
+        //     message: '您已申请借款,请耐心等待!',
+        //     confirmButtonColor:'#2F81FF'
+        //   }).then(() => {
+        //     this.$router.push('/load');
+        //   });
+        //   return;
+        // }
+        // if (this.loanOrderStatus === 3) {
+        //   Dialog.confirm({
+        //     message: '您还有未还款的订单，请先还款之后，再次申请借款。',
+        //     confirmButtonText: '去还款',
+        //     cancelButtonText: '我知道了',
+        //     confirmButtonColor:'#2F81FF'
+        //   }).then(() => {
+        //     this.$router.push('/load');
+        //   }).catch(() => {
+        //   });
+        // }
       },
     },
   }

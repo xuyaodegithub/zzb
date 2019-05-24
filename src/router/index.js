@@ -35,7 +35,7 @@ const router = new Router({
       component:() => import(/* webpackChunkName: "login" */'@/views/userCenter/index')
     },{
       path: '/updataCard',
-      name: '我的银行卡',
+      name: '编辑银行卡',
       component:() => import(/* webpackChunkName: "cardList" */'@/views/userCenter/updataCard/index')
     },{
       path: '/cardList',
@@ -56,7 +56,7 @@ const router = new Router({
     if (savedPosition) {
       return savedPosition
     }else{
-      // return { x: 0, y:0 }
+      return { x: 0, y:0 }
     }
   }
 })

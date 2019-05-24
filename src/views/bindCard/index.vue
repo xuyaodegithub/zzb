@@ -29,6 +29,7 @@
           v-model="personal.mobile"
           label="手机号码"
           placeholder="请输入银行预留手机号"
+          :maxlength="11"
         />
         <van-field
           type="number"
@@ -37,9 +38,8 @@
           placeholder="请输入验证码"
         >
         <div class="getcode"
-          slot="button"
-        >
-          获取验证码
+          slot="button" @click="fetchpreBindCard()">
+          {{countdown>0 ? countdown : '获取验证码'}}
         </div>
         </van-field>
       </van-cell-group>
@@ -70,12 +70,12 @@
             alreadySubmit: false,
             idNum: '34444445589645555',
             personal: {
-              bankNo: '111111111111111111111',
+              bankNo: '',
               mesCode: '',
               mobile: '15255899632'
             },
             keyboardShow: false,
-            countdown: 60, // 倒计时
+            countdown: 0, // 倒计时
             timer: null
           }
       },
@@ -88,15 +88,87 @@
         [Button.name]: Button,
         [Toast.name]: Toast
       },
-      mounted(){},
+      mounted(){
+          this.getUserInfo()
+      },
       computed:{},
       methods:{
+        getUserInfo () {//个人信息
+          getUserInfo().then(res=>{
+            if (!res.resultCode) {
+              this.username = res.data.name;
+              this.idNum = res.data.idCardNo;
+              this.personal.mobile = res.data.phone;
+            }
+          });
+        },
+        fetchpreBindCard () {//获取验证码
+          let bankNo = this.personal.bankNo.replace(/\s+/g, '');
+          if (!bankNo) {
+            Toast(`请输入银行卡号`);
+            return;
+          }
+          if(this.personal.mobile.length!==11){
+            Toast(`手机号错误`);
+            return;
+          }
+          if(this.countdown>0) return
+          preBindCard(
+            bankNo,
+            this.username,
+            this.personal.mobile
+          ).then(res=>{
+            if (!res.resultCode) {
+              if (res.data.sendStatus === '1') {
+                Toast('短信已发送');
+                // 发送短信
+                if (!this.timer) {
+                  this.countdown=60
+                  this.timer = setInterval(() => {
+                    if (this.countdown > 0) {
+                      this.countdown--;
+                    } else {
+                      this.countdown = 0;
+                      // this.isSend = false
+                      clearInterval(this.timer);
+                      this.timer = null;
+                    }
+                  }, 1000);
+                }
+              } else {
+                Toast(`${res.data.sendMsg}`);
+              }
+            } else {
+              Toast(`${res.resultMessage}`);
+            }
+          });
+        },
         fetchConfirmCardMsg(){
-          Toast({
-            type:'success',
-            message:'绑卡成功',
-            mask:true,
-            duration:1500
+          if(this.personal.mesCode.length<1){
+            Toast('请输入验证码');
+            return
+          }
+          if(this.personal.mobile.length!==11){
+            Toast(`手机号错误`);
+            return;
+          }
+          let bankNo = this.personal.bankNo.replace(/\s+/g, '');
+          confirmCardMsg(
+            this.personal.mesCode,
+            bankNo,
+            this.username,
+            this.personal.mobile).then(res=>{
+            if (!res.resultCode) {
+              if (res.data.bindStatus) {
+                Toast({type:'success',message:res.data.bindMsg,mask:true,duration:1500});
+                // Toast(`${res.data.bindMsg}`);
+                this.$router.replace('/signing');
+              } else {
+                Toast(`${res.data.bindMsg}`);
+              }
+            } else {
+              Toast(`${res.resultMessage}`);
+            }
           });
         }
       },
@@ -117,10 +189,12 @@
       }
     }
     .getcode{
+      text-align: center;
       padding-left: .3rem;
       border-left: 1px solid #D8D8D8;
       color: #2F81FF;
       font-size: .3rem;
+      min-width: 1.8rem;
     }
     .notice-box{
       font-size: .24rem;
