@@ -1,7 +1,7 @@
 <template>
 <!--  银行卡列表-->
   <div class="cardList">
-    <div v-if="list.length<1" class="nocard">
+    <div v-if="banklist.length<1" class="nocard">
       <img src="../../../assets/image/noCard.png" alt="">
       <p>您还未绑定银行卡</p>
       <div class="btn" @click="addCard()">去绑定</div>
@@ -11,10 +11,10 @@
         <img src="../../../assets/image/add.png" alt="">添加银行卡
       </div>
       <div class="list">
-          <div v-for="(val,index) in list" :key="index" class="item" :style="val.type==1 ? style : (val.type==2 ? style1 : style2)" @click="updata(val)">
-            <p>{{val.title}}</p>
+          <div v-for="(val,index) in banklist" :key="index" class="item" :style="val.bankCode=='CCB' ? style : (val.bankCode=='ICBC' ? style1 : style2)" @click="updata(val)">
+            <p>{{val.bankName}}</p>
             <p>储蓄卡</p>
-            <p>{{val.num | bankFilter}}</p>
+            <p>{{val.cardNo}}</p>
           </div>
       </div>
     </div>
@@ -23,8 +23,10 @@
 </template>
 
 <script>
-  import headerSub from '@/components/header/index'
-  import footerSub from '@/components/footer/index'
+  // import headerSub from '@/components/header/index'
+  // import footerSub from '@/components/footer/index'
+  import { getBankList } from '@/apis/index';
+  import { Toast } from 'vant';
   import js from '@/assets/image/jianshe.png'
   import gs from '@/assets/image/gs.png'
   import ny from '@/assets/image/ny.png'
@@ -32,10 +34,10 @@
         name: "cardList",
       data(){
           return {
-              list:[
-                {type:1,title:'中国建设银行',num:'341125197809157070'},
-                {type:2,title:'中国工商银行',num:'341125197809157070'},
-                {type:3,title:'中国农业银行',num:'341125197809157070'},
+            banklist:[
+                {bankCode:'CCB',bankName:'中国建设银行',num:'341125197809157070'},
+                {bankCode:'ICBC',bankName:'中国工商银行',num:'341125197809157070'},
+                {bankCode:'ABC',bankName:'中国农业银行',num:'341125197809157070'},
               ],
             style:{
                 backgroundImage:`url(${js})`
@@ -49,18 +51,29 @@
           }
       },
       components:{
-        headerSub,footerSub
+        // headerSub,footerSub
       },
-      mounted(){},
+      mounted(){
+          this.fetchBankList()
+      },
       computed:{
 
       },
       methods:{
+        fetchBankList () {//获取银行卡列表
+         getBankList().then(res=>{
+           if (!res.resultCode) {
+             this.banklist = res.data.bankCards;
+           } else {
+             Toast(`${res.resultMessage}`);
+           }
+         });
+        },
         addCard(){
           this.$router.push('/bindCard')
         },
         updata(val){
-          this.$router.push('/updataCard')
+          this.$router.push(`/updataCard?cardIdx=${val.cardIdx}`)
         }
       },
     }
