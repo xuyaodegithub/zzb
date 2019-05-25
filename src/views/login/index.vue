@@ -79,7 +79,8 @@
           if(this.phone.length>11) this.phone=this.phone.slice(0,11)
         },
         check(){
-          this.$router.push('/serviceAgreement')
+          // this.$store.commit()
+          this.$router.push(`/serviceAgreement?type=1`)
           // Dialog.alert({
           //   title: '标题',
           //   message: '弹窗内容'

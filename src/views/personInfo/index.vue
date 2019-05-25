@@ -140,6 +140,7 @@
     },
     mounted() {
       this.fetchUserInfo()
+      this.getUserInfo()
     },
     computed: {},
     methods: {
@@ -158,7 +159,7 @@
        });
       },
       // 个人信息
-      async getUserInfo () {
+      getUserInfo () {
       getUserInfo().then(res=>{
         if (!res.resultCode) {
           this.bankCardCount = res.data.bankCardCount;
@@ -183,10 +184,12 @@
         this.show = false;
       },
       checkMobile (value, message) {//检测手机号
+         let str=true
           if(value.length!==11){
             Toast(`${message}`)
-            return
+            str=false
           }
+          return str
       },
       paramsValidate (params, message,keycode) {//检测信息
          let str=true
@@ -247,7 +250,7 @@
         // debugger
         let {idNum, name} = this.userInfo;
         // 本地存储 loanPurpose
-        setStore('loanPurpose', this.usePurpose.id);//借款用途
+        // setStore('loanPurpose', this.usePurpose.id);//借款用途
        setUserInfo(
           idNum,
           name,
@@ -257,7 +260,7 @@
          if (!res.resultCode) {
            // 判断银行卡数量
            if (this.bankCardCount) {
-             this.$router.replace('/signing'); // 签约页面
+             this.$router.replace(`/signing?usePurposeId=${this.usePurpose.id}`); // 签约页面
            } else {
              this.$router.replace('/bindCard'); // 绑卡页面
            }
