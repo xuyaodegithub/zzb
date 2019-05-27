@@ -109,7 +109,7 @@
         });
       },
       applyLoan() {
-        this.$router.push('/personInfo');
+        this.$router.push('/load');
         // let canApply = [0, 4].includes(this.loanOrderStatus); // 可以申请
         // let waitExam = [1, 2].includes(this.loanOrderStatus); // 等待审核
         // if (canApply) {
