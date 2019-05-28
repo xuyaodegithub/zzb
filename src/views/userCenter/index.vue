@@ -9,7 +9,7 @@
   import headerSub from '@/components/header/index'
   import footerSub from '@/components/footer/index'
     export default {
-        name: "index",
+        name: "my",
       data(){
           return {
 

@@ -1,7 +1,10 @@
 <template>
 <!--  我的贷款列表-->
   <div class="myDlist">
-    <div v-for="(val,index) in list" :key="index" class="item">
+    <div class="noitem" v-if="loanList.length<1">
+      暂无数据...
+    </div>
+    <div v-for="(val,index) in loanList" :key="index" class="item" v-else @click="goDetail(val)">
       <p class="clear">
         <span>订单号：</span><span>{{val.orderNum}}</span><span>申请中</span>
       </p>
@@ -27,13 +30,13 @@
 </template>
 
 <script>
-  import headerSub from '@/components/header/index'
-  import footerSub from '@/components/footer/index'
+  import { orderstatusMatch } from '@/utils/match';
+  import { getLoanList } from '@/apis/index';
     export default {
         name: "myDlist",
       data(){
           return {
-            list:[
+            loanList:[
               {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:1},
               {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:1},
               {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:1},
@@ -41,23 +44,53 @@
           }
       },
       components:{
-        headerSub,footerSub
+
       },
-      mounted(){},
+      mounted(){
+          this.fetchLoanInfo()
+      },
       computed:{},
-      methods:{},
+      methods:{
+        // 获取贷款列表
+         fetchLoanInfo () {
+           getLoanList().then(res=>{
+             if (!res.resultCode) {
+               this.loanList = res.data;
+             } else {
+               Toast(`${res.resultMessage}`);
+             }
+           });
+        },
+        goDetail(item){//去详情
+           this.$router.push(`loadDetail?orderId=${item.orderNo}`)
+        },
+        // 展示 立即还款按钮
+        isShowRepay (num) {
+          let whiteList = ['5', '6', '9', '10', '11'];
+          return whiteList.includes(num);
+        },
+        getLoanDetail (orderNo, paybackAmount) {//还款
+          this.$router.push({name: 'Repayment', params: {orderId: orderNo, paybackAmount: paybackAmount}});
+        }
+      },
     }
 </script>
 
 <style scoped lang="scss">
+  .noitem{
+    text-align: center;
+    padding: 1rem 0;
+    color: #777777;
+  }
 .myDlist{
   margin-top: 0.22rem;
-  background-color: #ffffff;
-  padding: 0 .32rem 0;
+  /*background-color: #ffffff;*/
   color: #3B3B3B;
   font-size: .28rem;
   .item{
     margin-bottom: .24rem;
+    background-color: #ffffff;
+    padding: 0 .32rem 0;
   }
   .clear{
     line-height: .6rem;
