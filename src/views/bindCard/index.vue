@@ -108,6 +108,7 @@
           });
         },
         fetchpreBindCard () {//获取验证码
+          if(this.countdown>0) return
           let bankNo = this.personal.bankNo.replace(/\s+/g, '');
           if (!bankNo) {
             Toast(`请输入银行卡号`);
@@ -117,7 +118,6 @@
             Toast(`手机号错误`);
             return;
           }
-          if(this.countdown>0) return
           preBindCard(
             bankNo,
             this.username,

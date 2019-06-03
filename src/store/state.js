@@ -3,7 +3,8 @@ const state={
 
   },
   page:{
-    authStatus: 0
+    authStatus: 0,
+    ServiceAgreement:'',
   }
 }
 

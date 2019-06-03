@@ -1,9 +1,7 @@
 <template>
 <!--  我的-->
 <div>
-  <!--<header-sub></header-sub>-->
-  wode
-  <!--<footer-sub></footer-sub>-->
+  我的
 </div>
 </template>
 
@@ -11,7 +9,7 @@
   import headerSub from '@/components/header/index'
   import footerSub from '@/components/footer/index'
     export default {
-        name: "index",
+        name: "my",
       data(){
           return {
 
@@ -26,6 +24,6 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 </style>

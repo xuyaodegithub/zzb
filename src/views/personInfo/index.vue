@@ -168,7 +168,7 @@
        });
       },
       // 个人信息
-       getUserInfo () {
+      getUserInfo () {
       getUserInfo().then(res=>{
         if (!res.resultCode) {
           this.bankCardCount = res.data.bankCardCount;
@@ -259,7 +259,7 @@
         // debugger
         let {idNum, name} = this.userInfo;
         // 本地存储 loanPurpose
-        setStore('loanPurpose', this.usePurpose.id);//借款用途
+        // setStore('loanPurpose', this.usePurpose.id);//借款用途
        setUserInfo(
           idNum,
           name,
@@ -269,7 +269,7 @@
          if (!res.resultCode) {
            // 判断银行卡数量
            if (this.bankCardCount) {
-             this.$router.replace('/signing'); // 签约页面
+             this.$router.replace(`/signing?usePurposeId=${this.usePurpose.id}`); // 签约页面
            } else {
              this.$router.replace('/bindCard'); // 绑卡页面
            }

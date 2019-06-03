@@ -23,8 +23,6 @@
 </template>
 
 <script>
-  // import headerSub from '@/components/header/index'
-  // import footerSub from '@/components/footer/index'
   import { getBankList } from '@/apis/index';
   import { Toast } from 'vant';
   import js from '@/assets/image/jianshe.png'
@@ -51,7 +49,7 @@
           }
       },
       components:{
-        // headerSub,footerSub
+
       },
       mounted(){
           this.fetchBankList()

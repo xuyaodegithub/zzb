@@ -1,24 +1,183 @@
 <template>
 <!--签约-->
-  <div>
-    签约
+  <div class="singing">
+      <h3>签约</h3>
+      <p class="Tips">请确认您的借款金额后签约</p>
+      <div>
+        <van-cell-group>
+          <van-cell title="借款金额" :value="productInfo.loanAmount" />
+          <van-cell title="服务费" :value="productInfo.serviceFee" />
+          <van-cell title="还款金额" :value="productInfo.loanAmount" />
+          <van-cell title="借款期限" :value="productInfo.loanPeriod" />
+          <van-cell title="申请日期" :value="productInfo.applyTime" />
+        </van-cell-group>
+      </div>
+      <div class="check">
+        <van-checkbox class="flex" v-model="agreementArr[0]">本人承诺已认真阅读并将遵守 <span @click.stop="serverOne(0)">《本金借款协议》</span> <span @click.stop="serverOne(1)">《贷款用户确认书》</span></van-checkbox>
+        <van-checkbox v-model="agreementArr[1]">本人同意平台获取第三方征信数据</van-checkbox>
+      </div>
+      <div class="btn-sing">
+        <div class="btn" @click="fetchLoanPerform">签约</div>
+        <span class="cancal" @click="cancelFn">取消订单</span>
+      </div>
   </div>
 </template>
 
 <script>
+  import { Cell, CellGroup, Checkbox, Toast, Dialog } from 'vant';
+  import { loanPerform, loanPostDetail } from '@/apis/index';
+  import { getStore } from '@/utils/storage';
     export default {
         name: "index",
       data(){
           return {
-
+            productInfo: {
+              loanAmount: '',
+              totalRepayAmt: '',
+              serviceFee: '',
+              loanPeriod: '',
+              applyTime: ''
+            },
+            agreementInfo:[],
+            agreementArr:[false,false]
           }
       },
-      mounted(){},
-      computed:{},
-      methods:{},
+      components:{
+          [Cell.name]:Cell,
+          [CellGroup.name]:CellGroup,
+          [Checkbox.name]:Checkbox,
+          [Toast.name]:Toast,
+          [Dialog.name]:Dialog,
+      },
+      mounted(){
+          this.fetchLoanPostDetail()
+      },
+      computed:{
+        productId () {
+          return getStore('productId');
+        },
+        agreementTempId () {
+          let agree = this.agreementInfo;
+          let _arr = [];
+          agree.map(item => {
+            _arr.push(item.id);
+          });
+          return _arr;
+        },
+        loanPurpose () {//借款用途
+          // return getStore('loanPurpose');
+          return this.$route.query.usePurposeId
+        },
+        uninque () {// 现在时间戳
+          return new Date().getTime();
+        }
+      },
+      methods:{
+        fetchLoanPostDetail () {
+          loanPostDetail(this.productId).then(res=>{
+            if (!res.resultCode) {
+              this.agreementInfo = res.data.agreements;
+              this.productInfo = res.data;
+            }
+          });
+        },
+        fetchLoanPerform () {
+          if (!this.productInfo.loanAmount) {
+            Toast('未获取贷款信息，无法签约');
+            return;
+          }
+          if (!this.agreementArr[0]) {
+            Toast('请认真阅读并同意签约协议');
+            return;
+          }
+          if (!this.agreementArr[1]) {
+            Toast('请勾选同意平台获取第三方征信数据');
+            return;
+          }
+          // this.alreadyClick = true;
+          Toast.loading({
+            mask: true,
+            // message: '加载中...',
+            duration:0
+          });
+          loanPerform(this.agreementTempId, this.productId, this.loanPurpose, this.uninque).then(res=>{
+            Toast.clear()
+            if (!res.resultCode) {
+              this.orderNo = res.data.orderNo;
+              this.$router.replace(`/loadDetail?orderNo=${res.data.orderNo}`);
+              // this.alreadyClick = false;
+            } else {
+              // this.alreadyClick = false;
+              Toast(`${res.resultMessage}`);
+            }
+          }).catch(err=>{
+            console.log(err)
+            Toast.clear()
+          });
+        },
+        cancelFn () {
+          Dialog.confirm({
+            message: '您是否要取消订单？',
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+          }).then(() => {
+            this.$router.replace('/home');
+          }).catch(() => {
+          });
+        },
+        serverOne(index){
+          console.log(index)
+          this.$store.commit('SETS_ERVER',this.agreementInfo[index])
+          this.$router.push(`/serviceAgreement?type=2`)
+        }
+      }
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  $back:#2F81FF;
+.singing{
+  color: #333;
+  h3{
+    padding: 0 .32rem;
+    font-weight: 600;
+    background-color: #fff;
+    font-size: .48rem;
+    line-height: 1.2rem;
+  }
+  .Tips{
+    font-size: .24rem;
+    line-height: 1rem;
+    padding: 0 .32rem;
+    color: #AAAAAA;
+  }
+  .check{
+    padding:0.32rem;
+    font-size: .26rem;
+    color: #3B3B3B;
+    line-height: .42rem;
+    .van-checkbox{
+      margin-bottom: .16rem;
+    }
+    span{
+      color: $back;
+    }
+  }
+  .btn-sing{
+    padding: 0.38rem .32rem 0;
+    color: #fff;
+    font-size: .36rem;
+    text-align: center;
+    .btn{
+      background-color: $back;
+      margin-bottom: .50rem;
+      line-height: .9rem;
+    }
+  }
+  .cancal{
+    font-size: .3rem;
+    color: #999999;
+  }
 
+}
 </style>
