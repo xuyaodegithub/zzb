@@ -1,23 +1,27 @@
 <template>
     <section>
       <!--<header-sub></header-sub>-->
-      <div class="logo">分期淘</div>
+      <div class="top_login">
+        <img src="../../assets/image/login.png" alt="">
+      </div>
+      <!--<div class="logo">分期淘</div>-->
       <div class="content">
+        <h4>分期淘</h4>
         <div class="relate">
           <input type="number" class="phone" placeholder="请输入手机号" v-model="phone" maxlength="11" @input="changeValve()">
           <img src="../../assets/image/clear.png" alt="" v-show="phone.length>0" @click="phone=''">
         </div>
         <div class="flex a-i j-b">
-          <div class="relate">
-            <input type="number" placeholder="请输入验证码" v-model="code" @blur="gotop()">
+          <div class="relate codeDiv">
+            <input type="number" placeholder="请输入4位验证码" v-model="code" @blur="gotop()" class="codeInput">
             <img src="../../assets/image/clear.png" alt="" v-show="code.length>0" @click="code=''">
           </div>
           <button @click="sendCode()" :class="{'btnopa' : phone.length!=11 || CountDown>0 }">{{CountDown>0 ? CountDown : '发送验证码'}}</button>
         </div>
-        <p class="XY">登录即表示您同意 <span @click="check()"> 《分期淘服务协议》</span></p>
         <div class="loginBtn" :class="{'loginactive' : !iscanLogin}" @click="userLogin()">
           登录
         </div>
+        <p class="XY">登录即表示您同意 <span @click="check()"> 《分期淘服务协议》</span></p>
       </div>
     </section>
 </template>
@@ -113,6 +117,10 @@
   $bk:#2F81FF;
   section{
     /*min-height: 100%;*/
+    .top_login img{
+      display: block;
+      width: 100%;
+    }
     .logo{
       width: 1.3rem;
       line-height: 1.3rem;
@@ -121,22 +129,39 @@
       font-size: 0.36rem;
       color: #ffffff;
       border-radius: 0.24rem;
-      margin: 1.46rem auto 1.5rem;
+      /*margin: 1.46rem auto 1.5rem;*/
     }
     .content{
+      width: 6.86rem;
+      margin: 0 auto;
       font-size: 0.32rem;
-      padding: 0 0.64rem;
+      padding: 0.54rem 0.64rem .68rem .70rem;
+      box-shadow: 0 .4rem .4rem 0 rgba(0,0,0,.2);
+      position: relative;
+      top: -1.2rem;
+      background-color: #ffffff;
+      border-radius: .26rem;
+      h4{
+        font-size: .48rem;
+        color: #2F81FF;
+        text-align: center;
+        line-height: .66rem;
+        margin-bottom: .52rem;
+      }
       input{
         height: 0.5rem;
         line-height: 0.5rem;
         border: none;
       }
-      .phone{
+      .phone,.codeInput{
         display: block;
         width: 100%;
-        padding: 0.25rem 0;
-        border-bottom: 1px solid #EAE8E8;
-        margin-bottom: 0.36rem;
+        background-color: #F5F5F5;
+        line-height: .88rem;
+        height: .88rem;
+        text-indent: .2rem;
+        border-radius: 0.08rem;
+        margin:0 auto 0.4rem;
       }
       .relate{
         position: relative;
@@ -148,13 +173,17 @@
           width: 0.42rem;
           height: 0.42rem;
         }
+        .codeInput{
+          width: 3.36rem;
+          margin: 0;
+        }
+      }
+      .relate.codeDiv{
+        margin-right: .36rem;
       }
     }
     .flex {
-      padding: 0.15rem 0;
-      border-bottom: 1px solid #EAE8E8;
       div {
-        flex: 1;
         border: none;
       }
       input{
@@ -162,8 +191,8 @@
       }
       button{
         font-size: 0.28rem;
-        height: 0.72rem;
-        line-height: 0.72rem;
+        height: 0.88rem;
+        line-height: 0.88rem;
         width: 1.72rem;
         text-align: center;
         color: #ffffff;

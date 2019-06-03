@@ -1,6 +1,12 @@
 <template>
   <section>
     <!--<header-sub></header-sub>-->
+    <div class="download flex a-i">
+      <div>分期淘</div>
+      <p>分期淘 您的首选贷款平台</p>
+      <div class="btnLogo">下载</div>
+      <img src="../../assets/image/close.png" alt="">
+    </div>
     <div class="top" :style="style">
       <p class="title">借款金额(元)</p>
       <p class="num">{{currentProduct.loanAmount}}</p>
@@ -155,7 +161,33 @@
     background-color: $back;
     color: #ffffff;
     padding-bottom: 1.5rem;
-
+  .download{
+    padding: .16rem .3rem;
+    background-color: #3A383B;
+    font-size: .28rem;
+    color: #fff;
+    text-align: center;
+    & div:first-child{
+      width: .88rem;
+      line-height: .88rem;
+      background-color: $fs;
+      margin-right: .24rem;
+      font-size: .24rem;
+      border-radius: 0.08rem;
+    }
+    .btnLogo{
+      border-radius: 0.08rem;
+      margin:0 1rem 0 .42rem;
+      line-height: .44rem;
+      width: .96rem;
+      background-color: $fs;
+    }
+    & > img{
+      width: .24rem;
+      height: .24rem;
+      border: 1px solid #fff;
+    }
+  }
     .top {
       padding: 0.62rem 0.32rem 0.28rem;
       background-position: center;

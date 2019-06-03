@@ -1,5 +1,8 @@
 <template>
 <!--签约-->
+  <div>
+    签约
+  </div>
 </template>
 
 <script>

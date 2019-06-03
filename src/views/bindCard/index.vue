@@ -3,26 +3,30 @@
     <div>
       <van-cell-group>
         <van-field
+          left-icon="icon iconfont icon-xingming"
           input-align="right"
           v-model="username"
           label="姓名"
           :readonly="true"
         />
         <van-field
+          left-icon="icon iconfont icon-shenfenzheng"
           input-align="right"
           :value="idNum | personalCardId"
           label="身份证号"
           :readonly="true"
         />
         <van-field
+          left-icon="icon iconfont icon-yinhangqia"
           ref='refBank'
           input-align="right"
           type="number"
           v-model="personal.bankNo"
           label="银行卡号"
-          placeholder="请输入银行卡号"
+          placeholder="请填写您的卡号"
         />
         <van-field
+          left-icon="icon iconfont icon-icon--"
           ref='refBank'
           input-align="right"
           type="number"
@@ -32,6 +36,7 @@
           :maxlength="11"
         />
         <van-field
+          left-icon="icon iconfont icon-yanzhengma"
           type="number"
           v-model="personal.mesCode"
           label="验证码"
