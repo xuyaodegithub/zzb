@@ -6,8 +6,6 @@
 </template>
 
 <script>
-  import headerSub from '@/components/header/index'
-  import footerSub from '@/components/footer/index'
     export default {
         name: "my",
       data(){
@@ -16,7 +14,7 @@
           }
       },
       components:{
-        headerSub,footerSub
+
       },
       mounted(){},
       computed:{},

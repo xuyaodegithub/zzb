@@ -4,7 +4,7 @@
     <div class="noitem" v-if="loanList.length<1">
       暂无数据...
     </div>
-    <div v-for="(val,index) in loanList" :key="index" class="item" v-else @click="goDetail(val)">
+    <div v-for="(val,index) in loanList" :key="index" class="item" v-else @click="goDetail(val)" :style="style">
       <p class="clear">
         <span>订单号：</span><span>{{val.orderNum}}</span><span>申请中</span>
       </p>
@@ -32,10 +32,14 @@
 <script>
   import { orderstatusMatch } from '@/utils/match';
   import { getLoanList } from '@/apis/index';
+  import backI from '@/assets/image/Rectangle.png'
     export default {
         name: "myDlist",
       data(){
           return {
+            style:{
+              backgroundImage:`url(${backI})`
+            },
             loanList:[
               {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:1},
               {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:1},
@@ -47,7 +51,7 @@
 
       },
       mounted(){
-          this.fetchLoanInfo()
+          // this.fetchLoanInfo()
       },
       computed:{},
       methods:{
@@ -91,10 +95,12 @@
     margin-bottom: .24rem;
     background-color: #ffffff;
     padding: 0 .32rem 0;
+    background-size: cover;
   }
   .clear{
-    line-height: .6rem;
+    line-height: .8rem;
     border-bottom: 1px solid #D8D8D8;
+    color: #fff;
     span{
       display: inline-block;
     }
@@ -105,7 +111,7 @@
   }
   .flex{
     padding: .20rem 0;
-    color: #777777;
+    color: rgba(255,255,255,.6);
     font-size: .26rem;
     border-bottom: 1px solid #D8D8D8;
     p:first-child{
@@ -120,7 +126,7 @@
   .data{
     font-size: .26rem;
     line-height: .84rem;
-    color: #777;
+    color: rgba(255,255,255,.6);
   }
 }
 </style>
