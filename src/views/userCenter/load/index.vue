@@ -6,9 +6,9 @@
     </div>
     <div v-for="(val,index) in loanList" :key="index" class="item" v-else @click="goDetail(val)" :style="style">
       <p class="clear">
-        <span>订单号：</span><span>{{val.orderNum}}</span><span>申请中</span>
+        <span>订单号：</span><span>{{val.orderNum}}</span><span>{{val.type | statusChange}}</span>
       </p>
-      <div class="flex a-i j-b">
+      <div class="flex a-i j-b cellCard">
         <div>
           <p>到账金额(元)</p>
           <p>{{val.enmemoy}}</p>
@@ -22,8 +22,14 @@
           <p>{{val.updata}}</p>
         </div>
       </div>
-      <div class="data">
-        申请日期：{{val.updata}}
+      <div class="data flex j-b a-i">
+        <div>
+          <p>申请日期：{{val.updata}}</p>
+          <p v-if="val.type==3">还款日期：{{val.updata}}</p>
+        </div>
+        <div class="btn" @click.stop="getLoanDetail(val)" v-if="val.type==3">
+          立即还款
+        </div>
       </div>
     </div>
   </div>
@@ -42,8 +48,8 @@
             },
             loanList:[
               {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:1},
-              {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:1},
-              {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:1},
+              {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:2},
+              {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:3},
             ]
           }
       },
@@ -74,7 +80,7 @@
           return whiteList.includes(num);
         },
         getLoanDetail (orderNo, paybackAmount) {//还款
-          this.$router.push({name: 'Repayment', params: {orderId: orderNo, paybackAmount: paybackAmount}});
+          this.$router.push({path: '/repayment', params: {orderId: orderNo, paybackAmount: paybackAmount}});
         }
       },
     }
@@ -87,19 +93,22 @@
     color: #777777;
   }
 .myDlist{
-  margin-top: 0.22rem;
-  /*background-color: #ffffff;*/
   color: #3B3B3B;
   font-size: .28rem;
+  padding: .22rem .32rem 0;
   .item{
+    border-radius: 0.25rem;
     margin-bottom: .24rem;
-    background-color: #ffffff;
+    /*background-color: #ffffff;*/
     padding: 0 .32rem 0;
+    /*background-position: center;*/
     background-size: cover;
+    background-repeat: no-repeat;
+    /*overflow: hidden;*/
   }
   .clear{
-    line-height: .8rem;
-    border-bottom: 1px solid #D8D8D8;
+    line-height: .6rem;
+    border-bottom: 1px solid rgba(255,255,255,.2);
     color: #fff;
     span{
       display: inline-block;
@@ -109,24 +118,38 @@
       float: right;
     }
   }
-  .flex{
-    padding: .20rem 0;
+  .cellCard.flex{
+    padding: .22rem .24rem .12rem;
     color: rgba(255,255,255,.6);
+    line-height: .36rem;
     font-size: .26rem;
-    border-bottom: 1px solid #D8D8D8;
+    border-bottom: 1px solid rgba(255,255,255,.2);
     p:first-child{
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.04rem;
     }
     p:last-child{
       text-align: center;
       font-size: .28rem;
-      line-height: 0.48rem;
+      line-height: 0.6rem;
     }
   }
   .data{
     font-size: .26rem;
-    line-height: .84rem;
+    /*line-height: .84rem;*/
+    padding: .24rem .24rem 0.3rem;
+    line-height: .36rem;
     color: rgba(255,255,255,.6);
+    p:first-child{
+      margin-bottom: 0.04rem;
+    }
+    .btn{
+      color: #2F81FF;
+      text-align: center;
+      background-color: #fff;
+      line-height: .5rem;
+      width: 1.28rem;
+      border-radius: 0.06rem;
+    }
   }
 }
 </style>

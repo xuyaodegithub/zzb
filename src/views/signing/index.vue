@@ -1,8 +1,11 @@
 <template>
 <!--签约-->
   <div class="singing">
+    <div :style="style" class="singBack">
       <h3>签约</h3>
-      <p class="Tips">请确认您的借款金额后签约</p>
+      <p class="Tips flex a-i">
+        <img src="../../assets/image/tishi.png" alt="">
+        请确认您的借款金额后签约</p>
       <div>
         <van-cell-group>
           <van-cell title="借款金额" :value="productInfo.loanAmount" />
@@ -12,7 +15,9 @@
           <van-cell title="申请日期" :value="productInfo.applyTime" />
         </van-cell-group>
       </div>
-      <div class="check">
+    </div>
+
+    <div class="check">
         <van-checkbox class="flex" v-model="agreementArr[0]">本人承诺已认真阅读并将遵守 <span @click.stop="serverOne(0)">《本金借款协议》</span> <span @click.stop="serverOne(1)">《贷款用户确认书》</span></van-checkbox>
         <van-checkbox v-model="agreementArr[1]">本人同意平台获取第三方征信数据</van-checkbox>
       </div>
@@ -27,10 +32,14 @@
   import { Cell, CellGroup, Checkbox, Toast, Dialog } from 'vant';
   import { loanPerform, loanPostDetail } from '@/apis/index';
   import { getStore } from '@/utils/storage';
+  import sing from '@/assets/image/sing.png'
     export default {
         name: "index",
       data(){
           return {
+            style:{
+              backgroundImage:`url(${sing})`
+            },
             productInfo: {
               loanAmount: '',
               totalRepayAmt: '',
@@ -138,18 +147,28 @@
   $back:#2F81FF;
 .singing{
   color: #333;
+  padding: .4rem .32rem 0;
+  .singBack{
+    padding: .4rem;
+    background-size: cover;
+  }
   h3{
-    padding: 0 .32rem;
+    margin-bottom: .48rem;
+    color: #fff;
     font-weight: 600;
-    background-color: #fff;
     font-size: .48rem;
-    line-height: 1.2rem;
+    line-height: .66rem;
   }
   .Tips{
     font-size: .24rem;
-    line-height: 1rem;
-    padding: 0 .32rem;
-    color: #AAAAAA;
+    line-height: .34rem;
+    color: #EAEAEA;
+    margin-bottom: .34rem;
+    img{
+      width: .36rem;
+      height: .36rem;
+      margin-right: .12rem;
+    }
   }
   .check{
     padding:0.32rem;
@@ -164,13 +183,14 @@
     }
   }
   .btn-sing{
-    padding: 0.38rem .32rem 0;
+    padding: 0.18rem 0 0;
     color: #fff;
     font-size: .36rem;
     text-align: center;
     .btn{
+      border-radius: 0.08rem;
       background-color: $back;
-      margin-bottom: .50rem;
+      margin-bottom: .34rem;
       line-height: .9rem;
     }
   }
@@ -180,4 +200,14 @@
   }
 
 }
+</style>
+<style>
+  .singBack .van-cell, .singBack .van-cell-group,.singBack .van-cell__value{
+    background-color: rgba(0,0,0,0);
+    color: #EAEAEA;
+  }
+
+  .singBack [class*=van-hairline]::after{
+    border: none;
+  }
 </style>

@@ -115,7 +115,7 @@
         });
       },
       applyLoan() {
-        this.$router.push('/personInfo');
+        this.$router.push('/load');
         // let canApply = [0, 4].includes(this.loanOrderStatus); // 可以申请
         // let waitExam = [1, 2].includes(this.loanOrderStatus); // 等待审核
         // if (canApply) {
@@ -243,7 +243,7 @@
       font-size: 0.28rem;
       background-color: #ffffff;
       padding: 0 0.32rem 0.8rem 0.32rem;
-      margin-bottom: 0.9rem;
+      margin-bottom: 0.54rem;
 
       & > p {
         line-height: 0.7rem;
