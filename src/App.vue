@@ -15,7 +15,7 @@ export default {
   name: 'App',
   data(){
     return {
-      headershow:['登录','首页'],
+      headershow:['登录'],
       list:['首页','我的'],
       backFFF:['登录','服务协议']
     }
