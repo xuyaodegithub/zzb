@@ -121,7 +121,7 @@
             confirmButtonText: '确定',
             cancelButtonText: '取消'
           }).then(() => {
-            this.$router.replace({name: 'Home'});
+            this.$router.replace('/home');
           }).catch(() => {
           });
         },

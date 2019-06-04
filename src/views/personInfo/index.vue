@@ -4,6 +4,7 @@
     <!--<footer-sub></footer-sub>-->
     <van-cell-group>
       <van-field
+        left-icon="icon iconfont icon-xingming"
         :value="userInfo.name"
         input-align="right"
         label="姓名"
@@ -11,11 +12,13 @@
       />
       <van-field
         :value="userInfo.idNum | bankFilter"
+        left-icon="icon iconfont icon-shenfenzheng"
         label="身份证号"
         input-align="right"
         :readonly="true"
       />
       <van-cell
+        icon="icon iconfont icon-benzi"
         class="aurora-cell"
         title="借款用途"
         is-link
@@ -26,6 +29,7 @@
     <!--亲属-->
     <van-cell-group>
       <van-field
+        left-icon="icon iconfont icon-xingming1"
         v-model="familyMember.name"
         input-align="right"
         label="直系亲属姓名"
@@ -33,12 +37,14 @@
         required
       />
       <van-cell
+        icon="icon iconfont icon-qunzu"
         class="aurora-cell"
         title="关系"
         is-link
         :value="familyMember.relationText ? familyMember.relationText : '请选择'"
         @click="showPicker(2)"/>
       <van-field
+        left-icon="icon iconfont icon-icon--"
         v-model="familyMember.contacts"
         input-align="right"
         label="手机号"
@@ -50,12 +56,14 @@
     <van-cell-group class="mar-top20" v-for="(urgent, urgentInd) in urgentArr" :key="urgentInd">
       <van-field
         v-model="urgent.name"
+        left-icon="icon iconfont icon-lianxiren"
         input-align="right"
-        :label="urgentInd==0 ? '紧急联系人1' : '紧急联系人2'"
+        :label="urgentInd==0 ? '联系人1' : '联系人2'"
         required
         placeholder="请输入"
       />
       <van-cell
+        icon="icon iconfont icon-qunzu"
         class="aurora-cell"
         title="关系"
         is-link
@@ -64,6 +72,7 @@
         />
       <van-field
         v-model="urgent.contacts"
+        left-icon="icon iconfont icon-icon--"
         input-align="right"
         label="手机号"
         placeholder="请输入"
@@ -222,7 +231,7 @@
            Toast('请完善个人信息')
            return
          }
-         console.log(this.familyMember,this.urgentArr,this.paramsValidate(this.familyMember,'请完善直系亲属信息','urgentUserType'))
+         console.log(this.familyMember,this.urgentArr,this.checkMobile(this.familyMember.contacts,'直系亲属手机号输入有误'))
           if(!this.paramsValidate(this.familyMember,'请完善直系亲属信息','urgentUserType')) return
           if(!this.paramsValidate(this.urgentArr[0],'请完善紧急联系人信息','relativeType')) return
           if(!this.paramsValidate(this.urgentArr[1],'请完善紧急联系人信息','relativeType')) return
@@ -246,7 +255,7 @@
       // 提交个人基本信息
        setUserInfo () {
         this._orgRelative();
-        console.log(this.relatives)
+        console.log(this.relatives,this.usePurpose,this.bankCardCount)
         // debugger
         let {idNum, name} = this.userInfo;
         // 本地存储 loanPurpose
@@ -339,5 +348,8 @@
 <style>
   .personInfo .van-cell--required::before{
     color: #2F81FF;
+  }
+  .personInfo  .van-field__control--right{
+
   }
 </style>

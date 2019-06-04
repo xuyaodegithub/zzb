@@ -1,6 +1,6 @@
 <template>
-  <div id="app" :class="{'back' : $route.name=='登录'}">
-    <header-sub></header-sub>
+  <div id="app" :class="{'back' : backFFF.indexOf($route.name)>-1}">
+    <header-sub v-if="headershow.indexOf($route.name)<0"></header-sub>
     <transition name="slide">
       <router-view class="child"/>
     </transition>
@@ -15,7 +15,9 @@ export default {
   name: 'App',
   data(){
     return {
-      list:['首页','我的']
+      headershow:['登录','首页'],
+      list:['首页','我的'],
+      backFFF:['登录','服务协议']
     }
   },
   components:{
