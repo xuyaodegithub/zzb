@@ -115,7 +115,7 @@
         });
       },
       applyLoan() {
-        this.$router.push('/load');
+        this.$router.push('/selfAuthentication');
         // let canApply = [0, 4].includes(this.loanOrderStatus); // 可以申请
         // let waitExam = [1, 2].includes(this.loanOrderStatus); // 等待审核
         // if (canApply) {
@@ -124,7 +124,8 @@
         //     this.$router.push('/personInfo');
         //   } else {
         //     // this.$router.push({name: 'ID', query: {productId: this.currentProduct.productId}});
-        //     this.$router.push(`/ocrCard?productId=${this.currentProduct.productId}`);
+        //     // this.$router.push(`/ocrCard?productId=${this.currentProduct.productId}`);
+        //     this.$router.push(`/selfAuthentication`);
         //   }
         //   return;
         // }

@@ -14,6 +14,10 @@ const router = new Router({
       name: '首页',
       component:() => import(/* webpackChunkName: "home" */'@/views/home/index')
     },{
+      path: '/selfAuthentication',
+      name: '个人认证',
+      component:() => import(/* webpackChunkName: "selfAuthentication" */'@/views/selfAuthentication/index')
+    },{
       path: '/bindCard',
       name: '绑定银行卡',
       component:() => import(/* webpackChunkName: "bindCard" */'@/views/bindCard/index')

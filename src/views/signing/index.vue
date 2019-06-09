@@ -22,7 +22,7 @@
         <van-checkbox v-model="agreementArr[1]">本人同意平台获取第三方征信数据</van-checkbox>
       </div>
       <div class="btn-sing">
-        <div class="btn" @click="fetchLoanPerform">签约</div>
+        <div class="btn" @click="fetchLoanPerform" :class="{'canActive' : agreementArr.indexOf(false)>-1}">签约</div>
         <span class="cancal" @click="cancelFn">取消订单</span>
       </div>
   </div>
@@ -106,14 +106,14 @@
           // this.alreadyClick = true;
           Toast.loading({
             mask: true,
-            // message: '加载中...',
+            message: '签约中...',
             duration:0
           });
           loanPerform(this.agreementTempId, this.productId, this.loanPurpose, this.uninque).then(res=>{
             Toast.clear()
             if (!res.resultCode) {
-              this.orderNo = res.data.orderNo;
-              this.$router.replace(`/loadDetail?orderNo=${res.data.orderNo}`);
+              // this.orderNo = res.data.orderNo;
+              this.$router.replace(`/loadDetail?orderId=${res.data.orderNo}`);
               // this.alreadyClick = false;
             } else {
               // this.alreadyClick = false;
@@ -192,6 +192,9 @@
       background-color: $back;
       margin-bottom: .34rem;
       line-height: .9rem;
+    }
+    .canActive{
+      opacity: .6;
     }
   }
   .cancal{

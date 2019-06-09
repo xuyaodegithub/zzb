@@ -1,6 +1,6 @@
 <template>
     <div class="section">
-      <div class="fixed">
+      <div class="fixed" :class="{'noback' : $route.name==='我的'}">
         <van-icon name="arrow-left" class="backGo" v-if="!showBack" size="1em" @click="$router.go(-1)"/>
         {{headerTitle}}
       </div>
@@ -49,6 +49,9 @@
       top: 0;
       width: 100%;
       z-index: 999;
+    }
+    .noback{
+      /*background-color:#0F77E4 !important;*/
     }
     .backGo{
       position: absolute;

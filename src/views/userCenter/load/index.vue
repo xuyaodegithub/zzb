@@ -6,28 +6,29 @@
     </div>
     <div v-for="(val,index) in loanList" :key="index" class="item" v-else @click="goDetail(val)" :style="style">
       <p class="clear">
-        <span>订单号：</span><span>{{val.orderNum}}</span><span>{{val.type | statusChange}}</span>
+        <span>订单号：</span><span>{{val.orderNo}}</span><span>{{orderstatusMatch[val.orderStatus]}}</span>
       </p>
       <div class="flex a-i j-b cellCard">
         <div>
           <p>到账金额(元)</p>
-          <p>{{val.enmemoy}}</p>
+          <p>{{val.receivedAmount}}</p>
         </div>
         <div>
           <p>应还金额(元)</p>
-          <p>{{val.backmoney}}</p>
+          <p>{{val.paybackAmount}}</p>
         </div>
         <div>
           <p>借款期限(天)</p>
-          <p>{{val.updata}}</p>
+          <p>{{val.loanPeriod}}天</p>
         </div>
       </div>
       <div class="data flex j-b a-i">
         <div>
-          <p>申请日期：{{val.updata}}</p>
-          <p v-if="val.type==3">还款日期：{{val.updata}}</p>
+          <p>申请日期：{{val.applyTime}}</p>
+          <p v-if="val.repayDate">还款日期：{{val.repayDate}}</p>
+          <p v-if="val.actualTime">实际还款日期：{{val.actualTime}}</p>
         </div>
-        <div class="btn" @click.stop="getLoanDetail(val)" v-if="val.type==3">
+        <div class="btn" @click.stop="getLoanDetail(val,orderNo,val.paybackAmount)" v-if="isShowRepay(val.orderStatus)">
           立即还款
         </div>
       </div>
@@ -43,13 +44,15 @@
         name: "myDlist",
       data(){
           return {
+            orderstatusMatch,
             style:{
               backgroundImage:`url(${backI})`
             },
             loanList:[
-              {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:1},
-              {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:2},
-              {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:3},
+              // {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:1},
+              // {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:2},
+              // {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:3},
+              // {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',type:4},
             ]
           }
       },
@@ -57,7 +60,7 @@
 
       },
       mounted(){
-          // this.fetchLoanInfo()
+          this.fetchLoanInfo()
       },
       computed:{},
       methods:{
@@ -80,7 +83,8 @@
           return whiteList.includes(num);
         },
         getLoanDetail (orderNo, paybackAmount) {//还款
-          this.$router.push({path: '/repayment', params: {orderId: orderNo, paybackAmount: paybackAmount}});
+          this.$router.push(`/repayment?orderId=${orderNo}&paybackAmount=${paybackAmount}`);
+          // this.$router.push({path: '', params: {orderId: orderNo, paybackAmount: paybackAmount}});
         }
       },
     }

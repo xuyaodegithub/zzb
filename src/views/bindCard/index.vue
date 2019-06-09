@@ -77,7 +77,7 @@
             personal: {
               bankNo: '',
               mesCode: '',
-              mobile: '15255899632'
+              mobile: ''
             },
             keyboardShow: false,
             countdown: 0, // 倒计时
@@ -108,7 +108,7 @@
           });
         },
         fetchpreBindCard () {//获取验证码
-          if(this.countdown>0) return
+          if(this.countdown>0) return;
           let bankNo = this.personal.bankNo.replace(/\s+/g, '');
           if (!bankNo) {
             Toast(`请输入银行卡号`);
@@ -118,11 +118,16 @@
             Toast(`手机号错误`);
             return;
           }
+          Toast.loading({
+            mask: true,
+            message: '加载中...'
+          });
           preBindCard(
             bankNo,
             this.username,
             this.personal.mobile
           ).then(res=>{
+            Toast.clear()
             if (!res.resultCode) {
               if (res.data.sendStatus === '1') {
                 Toast('短信已发送');
@@ -167,7 +172,7 @@
               if (res.data.bindStatus) {
                 Toast({type:'success',message:res.data.bindMsg,mask:true,duration:1500});
                 // Toast(`${res.data.bindMsg}`);
-                this.$router.replace('/signing');
+                this.$router.replace('/cardList');
               } else {
                 Toast(`${res.data.bindMsg}`);
               }

@@ -4,34 +4,37 @@
     <div class="detail-top">
       <div :style="style" class=" flex a-i">
         <img :src="iconTop" alt="">
-        {{loanList.type | statusChange}}
+        {{orderstatusMatch[orderInfo.orderStatus]}} <span v-if="['6','10'].indexOf(orderInfo.orderStatus)>-1">已还{{orderInfo.repaidAmount}}</span>
       </div>
     </div>
-    <div class="d-center" v-if="loanList.type!=3">
+    <div class="d-center" v-if="['1','2','4'].indexOf(orderInfo.orderStatus)>-1">
       <img :src="centerIcon" alt="">
-      <p>{{loanList.type | statusText}}</p>
+      <p>{{orderInfo.orderStatus | statusText}}</p>
     </div>
     <div class="type3" v-else>
         <p>应还金额</p>
-        <h4>2000.00</h4>
-        <p>距还款日2019-05-23<span :class="{'delay' : Date.now()<loanList.backData}">还剩2天</span></p>
+        <h4>{{orderInfo.paybackAmount}}</h4>
+      <p v-if="+orderInfo.overdueDay">距还款日{{orderInfo.repayDate}}<span style="color: #ed4630;">已逾期{{orderInfo.overdueDay}}天</span></p>
+      <p v-else-if="!orderInfo.overdueDay && orderInfo.deadline==0">今日就是还款日</span></p>
+      <p v-else-if="['7','8'].indexOf(orderInfo.orderStatus)>-1">已还款</span></p>
+      <p v-else>距还款日{{orderInfo.repayDate}}<span>还剩{{orderInfo.deadline}}天</span></p>
     </div>
     <div class="d-bottom">
-        <p class="flex a-i j-b"><span>订单号</span><span>{{loanList.orderNum}}</span></p>
+        <p class="flex a-i j-b"><span>订单号</span><span>{{orderInfo.orderNo}}</span></p>
         <div>
-          <p class="flex a-i j-b"><span>申请日期</span><span>{{loanList.updata}}</span></p>
-          <p class="flex a-i j-b" v-if="loanList.type==3"><span>还款日期</span><span>{{loanList.backData}}</span></p>
+          <p class="flex a-i j-b"><span>申请日期</span><span>{{orderInfo.applyTime}}</span></p>
+          <p class="flex a-i j-b" v-if="orderInfo.repayDate"><span>还款日期</span><span>{{orderInfo.repayDate}}</span></p>
         </div>
-        <p class="flex a-i j-b"><span>借款金额</span><span>{{loanList.enmemoy}}元</span></p>
-        <p class="flex a-i j-b"><span>服务费</span><span>{{loanList.serverPay}}元</span></p>
-        <p class="flex a-i j-b"><span>应还金额</span><span>{{loanList.backmoney}}元</span></p>
-        <p class="flex a-i j-b"><span>借款期限</span><span>{{loanList.deyDay}}天</span></p>
+        <p class="flex a-i j-b"><span>借款金额</span><span>{{orderInfo.loanAmount}}元</span></p>
+        <p class="flex a-i j-b"><span>服务费</span><span>{{orderInfo.serviceFee}}元</span></p>
+        <p class="flex a-i j-b"><span>应还金额</span><span>{{orderInfo.paybackAmount}}元</span></p>
+        <p class="flex a-i j-b"><span>借款期限</span><span>{{orderInfo.loanPeriod}}天</span></p>
     </div>
    <div class="flex a-i j-b last">
      <span>到账银行卡</span>
-     <span>{{loanList.cardNo}}</span>
+     <span>{{orderInfo.backAccount}}</span>
    </div>
-  <div class="payBtn flex a-i" v-if="loanList.type==3">
+  <div class="payBtn flex a-i" v-if="['5','9'].indexOf(orderInfo.orderStatus)>-1">
       <div @click="repay()">立即还款</div>
       <div>我要延期</div>
   </div>
@@ -45,6 +48,13 @@
   import two from '@/assets/image/two.png'
   import two1 from '@/assets/image/two2.png'
   import three from '@/assets/image/three.png'
+  import four from '@/assets/image/four.png'
+  import four1 from '@/assets/image/four1.png'
+  import overOrder from '@/assets/image/overOrder.png'
+  import { orderstatusMatch } from '@/utils/match';
+  // import { Row, Col, PasswordInput, NumberKeyboard, Popup, Dialog, Toast, Icon, Button } from 'vant';
+  import { getOrderInfo, loanPostpone } from '@/apis/index';
+  import { getStore } from '@/utils/storage.js';
     export default {
         name: "detail",
       data(){
@@ -52,7 +62,9 @@
             style:{
               backgroundImage:`url(${back})`
             },
-            loanList: {orderNum:'12345678910121',enmemoy:500,backmoney:501,deyDay:7,updata:'2019-05-26',backData:'2019-05-26',type:3,serverPay:1,cardNo:'41596449641964196489'},
+            orderstatusMatch,
+            failVisi:'',
+            orderInfo: '',
 
           }
       },
@@ -60,23 +72,41 @@
 
       },
       mounted(){
-
+        this.fetchLoanInfo()
       },
       computed:{
         iconTop(){
-          if(this.loanList.type==1) return one;
-          else if(this.loanList.type==2) return two;
-          else if(this.loanList.type==3) return three;
+          if(this.orderInfo.orderStatus==1) return one;//申请中
+          else if(this.orderInfo.orderStatus==4 || this.orderInfo.orderStatus==2) return two;//等待放款//等待审核
+          else if(this.orderInfo.orderStatus==5 || this.orderInfo.orderStatus==9) return three;//等待还款
+          else if(this.orderInfo.orderStatus==7 || this.orderInfo.orderStatus==8) return overOrder;//已还款
+          else if(this.orderInfo.orderStatus==3 || this.orderInfo.orderStatus==12) return four;//等待还款
         },
         centerIcon(){
-          if(this.loanList.type==1) return one1;
-          else if(this.loanList.type==2) return two1;
+          if(this.orderInfo.orderStatus==1) return one1;
+          else if(this.orderInfo.orderStatus==4 || this.orderInfo.orderStatus==2) return two1;//等待放款//等待审核
+          else if(this.orderInfo.orderStatus==3 || this.orderInfo.orderStatus==12) return four1;//审核失败
           // else if(this.loanList.type==3) return three
+        },
+        orderNo () {
+          return this.$route.query.orderId;
+        },
+        phoneNum () {
+          return getStore('phoneNum');
         }
       },
       methods:{
+        // 贷款订单信息
+        fetchLoanInfo () {
+          getOrderInfo(this.orderNo).then(res=>{
+            if (!res.resultCode) {
+              this.orderInfo = res.data;
+              this.failVisi = res.data.orderStatus === 3;
+            }
+          });
+        },
         repay(){
-          this.$router.push('/repayment')
+          this.$router.push(`/repayment?orderId=${orderInfo.orderNo}&paybackAmount=${orderInfo.paybackAmount}`)
         }
       },
     }

@@ -1,27 +1,153 @@
 <template>
 <!--  我的-->
-<div>
-  我的
+<div class="my">
+    <div class="userInfo" :style="style">
+      <h4>{{userInfo.name}}</h4>
+      <p>（{{userInfo.phone}}）</p>
+      <div class="tag">
+        {{userInfo.grade}}
+      </div>
+      <div class="flex history j-b a-i">
+          <div>
+            <p>{{userInfo.repaidAmount}}</p>
+            <p>待还金额(元)</p>
+          </div>
+          <div>
+            <p>{{userInfo.loanCount}}</p>
+            <p>借款成功数(笔)</p>
+          </div>
+          <div>
+            <p>{{userInfo.overdueCount}}</p>
+            <p>逾期笔数(笔)</p>
+          </div>
+      </div>
+    </div>
+    <div class="mylist flex j-b a-i">
+        <div @click="gomyCard(1)">
+          <img src="../../assets/image/myone.png" alt="">
+          <p>贷款记录</p>
+        </div>
+        <div @click="gomyCard(2)">
+          <img src="../../assets/image/mytwo.png" alt="">
+          <p>我的银行卡</p>
+        </div>
+        <div @click="cancatKF()">
+            <img src="../../assets/image/mythree.png" alt="">
+            <p>联系客服</p>
+        </div>
+    </div>
 </div>
 </template>
 
 <script>
-    export default {
+  import userback from '@/assets/image/myback.png'
+  import { Dialog } from 'vant';
+  import { getUserHomeInfo } from '@/apis/index';
+  export default {
         name: "my",
       data(){
           return {
-
+            style:{
+              backgroundImage:`url(${userback})`
+            },
+            userInfo:{}
           }
       },
       components:{
+          [Dialog.name]:Dialog
+      },
+      mounted(){
+          this.getUserHomeInfo()
+      },
+      computed:{},
+      methods:{
+        gomyCard(key){
+          if(key===1) this.$router.push('/load')
+          else if(key===2) this.$router.push('/cardList')
+        },
+        cancatKF(){
+            Dialog.confirm({
+              // title: '',
+              message: '联系客服时，请主动告知您注册时的手机号！',
+              confirmButtonText:'拨打电话',
+              cancelButtonColor:'#999999',
+              confirmButtonColor:'#1E8CFF'
+            }).then(() => {
+              // on confirm
+            }).catch(() => {
+              // on cancel
+            });
+          }, // 个人信息
+        getUserHomeInfo () {
+          getUserHomeInfo().then(res=>{
+            if (!res.resultCode) {
+              this.userInfo = res.data;
+            }
+          });
+        }
 
       },
-      mounted(){},
-      computed:{},
-      methods:{},
     }
 </script>
 
 <style scoped lang="scss">
-
+.userInfo{
+  padding: .8rem .6rem .7rem;
+  background-size: cover;
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: .2rem;
+  h4{
+    font-size: .487rem;
+    line-height: .66rem;
+    margin-bottom: .04rem;
+  }
+  & > p{
+    font-size: .24rem;
+    line-height: .34rem;
+    margin-bottom: .06rem;
+  }
+  .tag{
+    display: inline-block;
+    padding: 0 .2rem;
+    background-color: #fff;
+    font-size: .22rem;
+    line-height: .42rem;
+    color: #4084FF;
+    margin-bottom: .46rem;
+    border-radius: .21rem;
+  }
+  .history{
+    font-size: .36rem;
+    line-height: .5rem;
+    p:last-child{
+      font-size: .28rem;
+      line-height: .4rem;
+      margin-top: .08rem;
+      color: rgba(255,255,255,.4);
+    }
+  }
+}
+  .mylist{
+    background-color: #ffffff;
+    padding:0 .22rem;
+    font-size: .26rem;
+    line-height: .36rem;
+    color: #333333;
+    text-align: center;
+    & > div{
+      padding: .22rem 0;
+      flex: 1;
+    }
+    & > div:nth-child(3n-1){
+      border-left: 1px solid #EEEEEE;
+      border-right: 1px solid #EEEEEE;
+    }
+    img{
+      display: inline;
+      width: .44rem;
+      height: .44rem;
+      margin: 0 auto .18rem;
+    }
+  }
 </style>

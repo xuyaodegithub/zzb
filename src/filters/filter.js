@@ -41,15 +41,11 @@ const calcDaysFilter = (end, start) => {
   } catch (err) {
   }
 };
-const statusChange = (val) => {
-  if(val==1) return '申请中'
-  else if(val==2) return '等待放款'
-  else if(val==3) return '等待还款'
-};
 const statusText = (val) => {
   if(val==1) return '订单审核中，请耐心等待'
-  else if(val==2) return '订单已审核，请耐心等待放款'
-  else if(val==3) return '距还款日2019-05-23'
+  else if(val==2) return '订单未审核，请耐心等待'
+  else if(val==3 || val==12) return '很遗憾审核未通过'
+  else if(val==4) return '订单已审核，请耐心等待放款'
 }
 
 export {
@@ -59,6 +55,5 @@ export {
   calcDaysFilter,
   mobileFilter,
   personalCardId,
-  statusChange,
   statusText
 };

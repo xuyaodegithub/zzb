@@ -1,55 +1,143 @@
 <template>
   <div class="section">
-    <div class="flex a-i j-b">
+    <div class="flex a-i j-b ocrCard">
       <div>
         <van-uploader :after-read="onRead" accept="image/*">
-          <img src="../../assets/image/peoper.png" alt="" v-if="!isup">
-          <img :src="isup" alt="图片加载错误" v-else>
+          <div v-if="showFloading" class="loadings flex a-i">
+            <div>
+              <van-loading color="#1989fa" class="loadingIcon"/>
+              <p>上传中...</p>
+            </div>
+          </div>
+          <div v-else>
+            <img src="../../assets/image/peoper.png" alt="" v-if="!isup">
+            <img :src="isup" alt="图片加载错误" v-else>
+          </div>
         </van-uploader>
       </div>
       <div>
-        <van-uploader :after-read="onRead" accept="image/*">
-          <img src="../../assets/image/coun.png" alt="" v-if="!isdown">
-          <img :src="isdown" alt="图片加载错误" v-else>
+        <van-uploader :after-read="onReadback" accept="image/*">
+          <div v-if="showDloading" class="loadings flex a-i">
+            <div>
+              <van-loading color="#1989fa" class="loadingIcon"/>
+              <p>上传中...</p>
+            </div>
+          </div>
+          <div v-else>
+            <img src="../../assets/image/coun.png" alt="" v-if="!isdown">
+            <img :src="isdown" alt="图片加载错误" v-else>
+          </div>
         </van-uploader>
       </div>
     </div>
     <div class="bittom">
       <img src="../../assets/image/fexzp.png" alt="">
-      <div class="btn" :class="{'active' : isdown && isup }" @click="nextTo()">下一步</div>
+      <div class="btn" :class="{'active' : isActive }" @click="handerUpload()">下一步</div>
     </div>
-    <div class="zhezhao" v-show="showModel"></div>
+    <div class="zhezhao" v-show="showModel" @click="showModel=false"></div>
     <div class="warning" v-show="showModel">
       <img src="../../assets/image/error.png" alt="">
-      身份证识别错误 请重新上传
+      {{errMsg}}
     </div>
   </div>
 
 </template>
 
 <script>
-  import { Uploader } from 'vant';
+  // import { Uploader } from 'vant';
+  import { Uploader, Toast, Loading } from 'vant';
+  import { handleOcrPrepare, handleOcrResult } from '@/apis/index';
+  const formdata = new FormData();
     export default {
         name: "index",
       data(){
           return {
               isup:'',
               isdown:'',
-              showModel:false
+              showModel:false,
+              showFloading:false,
+              showDloading:false,
+              errMsg:''
           }
       },
       components:{
-          [Uploader.name]:Uploader
+          [Uploader.name]:Uploader,
+          [Toast.name]:Toast,
+          [Loading.name]:Loading,
       },
       mounted(){},
-      computed:{},
+      computed:{
+        productId () {
+          return this.$route.query.productId;
+        },
+        isActive(){
+          return this.isdown && this.isup
+        }
+      },
       methods:{
         nextTo(){
-          // if(!isup || !isdown) return
-          this.$router.push('/personInfo')
+          // // if(!isup || !isdown) return
+          // this.$router.push('/personInfo')
         },
         onRead(file) {
-          console.log(file)
+         console.log(file)
+          // this.isup=file.content
+          this.fetchOcrPrepare('F', file.file,file.content);
+
+        },
+        onReadback(file) {
+          this.fetchOcrPrepare('B', file.file,file.content);
+        },
+        // 后台检测身份证
+         fetchOcrPrepare (picType, file, picurl) {//检查身份证
+           if(picType==='F')this.showFloading=true;
+           else this.showDloading=true;
+          formdata.set('productId', this.productId);
+          formdata.set('picType', picType);
+          formdata.set('picture', file);
+          handleOcrPrepare(formdata).then(res=>{
+            this.showFloading=false
+            this.showDloading=false
+             if (res === 'networkdisconnect' || res === 'timeout') {
+               console.log('超时');
+               console.timeEnd('pic');
+               Toast('网络错误,请重新尝试!')
+               return;
+             }
+             if (!res.resultCode && !res.data.status) {
+               console.log('图片验证成功');
+               console.timeEnd('pic');
+               if(picType==='F') this.isup=picurl
+               else this.isdown=picurl
+             } else {
+               Toast(`${res.data.message || res.data.resultMessage} || `);
+             }
+           });//
+          console.time('pic');
+        },
+        handerUpload () {//下一步
+          if(!this.isActive) return
+          Toast.loading({
+            duration:0,
+            mask: true,
+            message: '正在进行身份认证...'
+          });
+          handleOcrResult().then(res=>{
+            Toast.clear()
+            if (res === 'networkdisconnect' || res === 'timeout') {
+              Toast('网络错误。请重新尝试!')
+              return;
+            }
+            if (!res.resultCode) {
+              this.$router.push('/personInfo');
+            } else {
+              this.isup = '';
+              this.isdown = '';
+              this.errMsg = res.resultMessage;
+              this.showModel=true
+            }
+          });
+
         }
       },
     }
@@ -59,7 +147,7 @@
   .section{
     /*min-height: 100%;*/
     background-color: #F6F6F6;
-    .flex{
+    .flex.ocrCard{
       background-color: #ffffff;
       padding: 0.32rem;
       img{
@@ -110,6 +198,18 @@
         height: .64rem;
         margin: .32rem auto .52rem;
       }
+    }
+  }
+  .loadings{
+    font-size: .28rem;
+    text-align: center;
+    width: 3.3rem;
+    height: 2.5rem;
+    .loadingIcon,& > div{
+      margin: 0 auto;
+    }
+    .loadingIcon{
+      margin-bottom: .2rem;
     }
   }
 </style>
