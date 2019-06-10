@@ -96,7 +96,11 @@
       mounted(){
           this.getUserInfo()
       },
-      computed:{},
+      computed:{
+          hasback(){
+            return this.$route.query.back
+          }
+      },
       methods:{
         getUserInfo () {//个人信息
           getUserInfo().then(res=>{
@@ -177,7 +181,8 @@
               if (res.data.bindStatus) {
                 Toast({type:'success',message:res.data.bindMsg,mask:true,duration:1500});
                 // Toast(`${res.data.bindMsg}`);
-                this.$router.replace('/cardList');
+                if(this.hasback) this.$router.replace('/cardList');
+                else this.$router.replace('/selfAuthentication');
               } else {
                 Toast(`${res.data.bindMsg}`);
               }

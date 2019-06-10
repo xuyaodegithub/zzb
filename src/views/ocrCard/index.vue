@@ -129,7 +129,8 @@
               return;
             }
             if (!res.resultCode) {
-              this.$router.push('/personInfo');
+              this.$router.replace('/selfAuthentication');
+              // this.$router.push('/personInfo');
             } else {
               this.isup = '';
               this.isdown = '';
@@ -183,7 +184,7 @@
       top: 50%;
       left: 50%;
       width: 2.56rem;
-      height: 2.56rem;
+      /*height: 2.56rem;*/
       color: #fff;
       background-color: #20232D;
       border-radius: 0.1rem;
@@ -191,12 +192,12 @@
       margin-left: -1.28rem;
       text-align: center;
       font-size: .28rem;
-      padding: 0 .28rem;
+      padding:0 .28rem 0.28rem;
       img{
         display: block;
         width: .64rem;
         height: .64rem;
-        margin: .32rem auto .52rem;
+        margin: .3rem auto .3rem;
       }
     }
   }

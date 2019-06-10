@@ -68,7 +68,7 @@
          });
         },
         addCard(){
-          this.$router.push('/bindCard')
+          this.$router.push(`/bindCard?back=list`)
         },
         updata(val){
           this.$router.push(`/updataCard?cardIdx=${val.cardIdx}`)
