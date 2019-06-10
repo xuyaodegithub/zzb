@@ -159,9 +159,6 @@
       orderId () {
         return this.$route.query.orderId;
       },
-      selectCardIndex () {
-        return this.checklist.indexOf(true);
-      },
       phoneNum () {
         return getStore('phoneNum');
       },
@@ -187,10 +184,6 @@
         this.verifyCode = this.verifyCode.slice(0, this.verifyCode.length - 1);
       },
       showcodePopup(){
-        if(!this.moneyNum){
-          Toast('请输入还款金额')
-          return
-        }
         if (!this.canRepay) {
           Toast('金额不能大于还款金额，且不能为0');
           // this.repayAmount = this.$route.params.paybackAmount
@@ -201,11 +194,6 @@
         // this.showCode=true
         // this.verifyCode=''
       },
-      // paforMoney(){
-      //   if(this.verifyCode.length<6) return
-      //   this.showResult=true;
-      //   this.showCode=false;
-      // },
       choseItem(item){
         this.showbank=false
         this.selectBank=item
@@ -231,6 +219,7 @@
         getBankList().then(res=>{
           if (!res.resultCode) {
             this.banklist = res.data.bankCards;
+            this.selectBank = res.data.bankCards[0];
             // let len = this.banklist.length;
             // this.checklist = new Array(len).fill(false);
             // this.checklist[0] = true;
@@ -265,6 +254,7 @@
       },
       // 确认还款
       paforMoney () {//2确认按钮
+        if(this.verifyCode.length<6) return;
         Toast.loading({
           duration:0,
           mask: true,
@@ -273,6 +263,7 @@
         // this.showloadVisi = true;
         // this.alreadyClick = true;
        getRepayment(this.verifyCode, this.payorderId).then(res=>{
+         Toast.clear()
          this.showCode = false;
          this.showKeyboard = false;
          if (!res.resultCode) {
@@ -284,6 +275,9 @@
            this.verifyCode = '';
            Toast(`${res.resultMessage}`);
          }
+       }).catch(err=>{
+         Toast.clear()
+         console.log(err)
        });
 
       },

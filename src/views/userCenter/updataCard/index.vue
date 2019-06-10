@@ -49,9 +49,15 @@ export default {
     return {
       item:{type:1,title:'中国建设银行',num:'341125197809157070'},
       checked: false,
-      style: {
-        'backgroundImage': `url(${js})`
-      }
+      style:{
+        backgroundImage:`url(${js})`
+      },
+      style1:{
+        backgroundImage:`url(${gs})`
+      },
+      style2:{
+        backgroundImage:`url(${ny})`
+      },
 
     };
   },

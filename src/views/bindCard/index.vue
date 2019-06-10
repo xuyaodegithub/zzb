@@ -163,11 +163,16 @@
             return;
           }
           let bankNo = this.personal.bankNo.replace(/\s+/g, '');
+          Toast.loading({
+            mask: true,
+            message: '加载中...'
+          });
           confirmCardMsg(
             this.personal.mesCode,
             bankNo,
             this.username,
             this.personal.mobile).then(res=>{
+              Toast.clear()
             if (!res.resultCode) {
               if (res.data.bindStatus) {
                 Toast({type:'success',message:res.data.bindMsg,mask:true,duration:1500});

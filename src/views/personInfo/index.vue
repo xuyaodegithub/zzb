@@ -172,7 +172,8 @@
       getUserInfo().then(res=>{
         if (!res.resultCode) {
           this.bankCardCount = res.data.bankCardCount;
-          this.$store.commit('AUTHSTATUS', res.data.ocrStatus);
+          // console.log(res.data.ocrStatus,'ooooooooooooooooooo')
+          // this.$store.commit('AUTHSTATUS', res.data.ocrStatus);
         }
       });
       },

@@ -158,7 +158,7 @@
         display: block;
         width: 100%;
         background-color: #F5F5F5;
-        line-height: .88rem;
+        line-height: .5rem;
         height: .88rem;
         text-indent: .2rem;
         border-radius: 0.08rem;

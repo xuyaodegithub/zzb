@@ -36,7 +36,7 @@
    </div>
   <div class="payBtn flex a-i" v-if="['5','9'].indexOf(orderInfo.orderStatus)>-1">
       <div @click="repay()">立即还款</div>
-      <div>我要延期</div>
+      <div @click="delayMyself()">我要延期</div>
   </div>
 </div>
 </template>
@@ -50,6 +50,7 @@
   import three from '@/assets/image/three.png'
   import four from '@/assets/image/four.png'
   import four1 from '@/assets/image/four1.png'
+  import five from '@/assets/image/bufen.png'
   import overOrder from '@/assets/image/overOrder.png'
   import { orderstatusMatch } from '@/utils/match';
   // import { Row, Col, PasswordInput, NumberKeyboard, Popup, Dialog, Toast, Icon, Button } from 'vant';
@@ -76,11 +77,12 @@
       },
       computed:{
         iconTop(){
-          if(this.orderInfo.orderStatus==1) return one;//申请中
-          else if(this.orderInfo.orderStatus==4 || this.orderInfo.orderStatus==2) return two;//等待放款//等待审核
-          else if(this.orderInfo.orderStatus==5 || this.orderInfo.orderStatus==9) return three;//等待还款
-          else if(this.orderInfo.orderStatus==7 || this.orderInfo.orderStatus==8) return overOrder;//已还款
-          else if(this.orderInfo.orderStatus==3 || this.orderInfo.orderStatus==12) return four;//等待还款
+          if(['1'].indexOf(this.orderInfo.orderStatus)>-1) return one;//申请中
+          else if(['4','2'].indexOf(this.orderInfo.orderStatus)>-1) return two;//等待放款//等待审核
+          else if(['5','9'].indexOf(this.orderInfo.orderStatus)>-1) return three;//等待还款
+          else if(['7','8'].indexOf(this.orderInfo.orderStatus)>-1) return overOrder;//已还款
+          else if(['3','12'].indexOf(this.orderInfo.orderStatus)>-1) return four;//审核失败
+          else if(['6','10'].indexOf(this.orderInfo.orderStatus)>-1) return five;//等待还款
         },
         centerIcon(){
           if(this.orderInfo.orderStatus==1) return one1;
@@ -107,7 +109,10 @@
         },
         repay(){
           this.$router.push(`/repayment?orderId=${orderInfo.orderNo}&paybackAmount=${orderInfo.paybackAmount}`)
-        }
+        },
+        delayMyself(){
+          this.$router.push(`/delay?orderId=${orderInfo.orderNo}&paybackAmount=${orderInfo.paybackAmount}`)
+        },
       },
     }
 </script>

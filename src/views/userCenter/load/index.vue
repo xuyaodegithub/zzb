@@ -28,7 +28,7 @@
           <p v-if="val.repayDate">还款日期：{{val.repayDate}}</p>
           <p v-if="val.actualTime">实际还款日期：{{val.actualTime}}</p>
         </div>
-        <div class="btn" @click.stop="getLoanDetail(val,orderNo,val.paybackAmount)" v-if="isShowRepay(val.orderStatus)">
+        <div class="btn" @click.stop="getLoanDetail(val.orderNo,val.paybackAmount)" v-if="isShowRepay(val.orderStatus)">
           立即还款
         </div>
       </div>

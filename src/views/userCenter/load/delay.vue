@@ -65,6 +65,7 @@
         <p>输入验证码</p>
         <p>还款需要短信确认，验证码已 发送至您手机159****8040</p>
         <van-password-input
+          ref="passwordCode"
           :value="verifyCode"
           :mask="false"
           @focus="showKeyboard = true"
@@ -187,10 +188,6 @@
         this.verifyCode = this.verifyCode.slice(0, this.verifyCode.length - 1);
       },
       showcodePopup(){
-        if(!this.moneyNum){
-          Toast('请输入还款金额')
-          return
-        }
         if (!this.canRepay) {
           Toast('金额不能大于还款金额，且不能为0');
           // this.repayAmount = this.$route.params.paybackAmount
@@ -201,11 +198,6 @@
         // this.showCode=true
         // this.verifyCode=''
       },
-      // paforMoney(){
-      //   if(this.verifyCode.length<6) return
-      //   this.showResult=true;
-      //   this.showCode=false;
-      // },
       choseItem(item){
         this.showbank=false
         this.selectBank=item
@@ -231,6 +223,7 @@
         getBankList().then(res=>{
           if (!res.resultCode) {
             this.banklist = res.data.bankCards;
+            this.selectBank = res.data.bankCards[0];
             // let len = this.banklist.length;
             // this.checklist = new Array(len).fill(false);
             // this.checklist[0] = true;
@@ -253,9 +246,9 @@
             let _this = this;
             this.payorderId = res.data.payorderId;
             this.showCode = true;//验证码弹框
-            // this.$nextTick(() => {
-            //   _this.$refs.validateRef.focus();
-            // });
+            this.$nextTick(() => {
+              _this.$refs.passwordCode.focus();
+            });
           } else {
             // this.alreadyPay = false;
             Toast(`${res.resultMessage}`);
@@ -265,6 +258,7 @@
       },
       // 确认还款
       paforMoney () {//2确认按钮
+        if(this.verifyCode.length<6) return;
         Toast.loading({
           duration:0,
           mask: true,
