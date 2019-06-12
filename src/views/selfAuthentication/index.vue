@@ -30,27 +30,62 @@
             立即认证
           </div>
         </div>
+      <div class="btn">
+          <div class="btn_btn" :class="{'active' : selfStatusInfo.status!=='3'}" @click="nextTo()">下一步</div>
+      </div>
     </div>
 </template>
 
 <script>
+  import { selfAuthentication } from '@/apis/index';
+  import {  Toast } from 'vant';
     export default {
         name: "Authentication",
       data(){
           return {
-
+            selfStatusInfo:''
           }
       },
-      components:{},
+      components:{
+        [Toast.name]:Toast
+      },
       computed:{},
+      mounted(){
+          this.getSelfStatus()
+      },
       methods:{
         Authentication(key){
-            if(key===1) this.$router.push('/ocrCard')
-            else if(key===2) this.$router.push('/personInfo')
-            else if(key===3) this.$router.push('/bindCard')
+          if(this.selfStatusInfo.status==='3'){
+            Toast('所有信息已认证，请点击下一步进行借款.');
+            return
+          }
+            if(key===1){
+              if(this.selfStatusInfo.status==='0') this.$router.push('/ocrCard')
+              else  Toast('身份已认证,请进行其他认证.');
+            }else if(key===2) {
+              if(this.selfStatusInfo.status==='1') this.$router.push('/personInfo')
+              else if(this.selfStatusInfo.status==='0') Toast('请先进行身份认证.');
+              else if(this.selfStatusInfo.status==='2') Toast('个人信息已认证,请进行银行卡认证.');
+              // else  Toast('个人信息已认证,请进行银行卡认证.');
+            }else if(key===3) {
+              if(this.selfStatusInfo.status==='2') this.$router.push('/bindCard')
+              else if(this.selfStatusInfo.status==='0') Toast('请先进行身份认证.');
+              else if(this.selfStatusInfo.status==='1') Toast('请先进行个人信息认证.');
+            }
+        },
+        getSelfStatus(){
+          selfAuthentication().then(res=>{
+            if(!res.resultCode){
+              this.selfStatusInfo=res.data
+            }else{
+              Toast(`${res.resultMessage}`);
+            }
+          })
+        },
+        nextTo(){
+          this.$router.push('/personInfo')
         }
       },
-      mounted(){}
     }
 </script>
 
@@ -92,6 +127,20 @@
         margin-top: -0.22rem;
         right: .44rem;
         border-radius:.22rem ;
+      }
+    }
+    & > .btn{
+      margin-top: 2rem;
+      .btn_btn{
+        font-size: .36rem;
+        background-color: #2F81FF;
+        line-height: .9rem;
+        color: #fff;
+        text-align: center;
+        border-radius: 0.08rem;
+      }
+      .active{
+        opacity: .6;
       }
     }
   }

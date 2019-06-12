@@ -113,6 +113,7 @@
             Toast.clear()
             if (!res.resultCode) {
               // this.orderNo = res.data.orderNo;
+              Toast({type:'success',message:'签约成功',mask:true,duration:1500});
               this.$router.replace(`/loadDetail?orderId=${res.data.orderNo}`);
               // this.alreadyClick = false;
             } else {

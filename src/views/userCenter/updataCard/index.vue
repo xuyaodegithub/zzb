@@ -1,11 +1,11 @@
 <template>
 <!--  银行卡编辑解绑-->
   <div class="updataCard">
-    <div class="item flex" :style="style">
+    <div class="item flex" :style="{ backgroundImage:`url(${bankback(item.bankCode)})` }">
         <div>
           <p>{{item.title}}</p>
           <p>储蓄卡</p>
-          <p>{{item.num | bankFilter}}</p>
+          <p>{{item.cardNo | bankFilter}}</p>
         </div>
         <div class="btn" @click="Unbind()">解绑</div>
     </div>
@@ -32,6 +32,7 @@ import { Row, Col, PasswordInput, NumberKeyboard, Popup, Dialog, Toast, Icon, Bu
 import js from '@/assets/image/jianshe.png'
 import gs from '@/assets/image/gs.png'
 import ny from '@/assets/image/ny.png'
+import initback from '@/assets/image/initbank.jpg'
 export default {
   components: {
     [Row.name]: Row,
@@ -47,24 +48,20 @@ export default {
   },
   data () {
     return {
-      item:{type:1,title:'中国建设银行',num:'341125197809157070'},
+      item:{type:1,title:'中国建设银行',cardNo:'341125197809157070',bankCode:'ICBC'},
       checked: false,
-      style:{
-        backgroundImage:`url(${js})`
-      },
-      style1:{
-        backgroundImage:`url(${gs})`
-      },
-      style2:{
-        backgroundImage:`url(${ny})`
-      },
-
     };
   },
   computed: {
 
   },
   methods: {
+    bankback(val){
+      if(val==='CCB')return js;
+      else if(val==='ICBC')return gs;
+      else if(val==='ABC')return ny;
+      else return initback
+    },
     Unbind () {
       let _self = this;
       Dialog.confirm({
@@ -101,6 +98,7 @@ export default {
     line-height: .48rem;
     justify-content: space-between;
     margin-bottom: .4rem;
+    border-radius: .08rem;
     p:nth-child(2){
       font-size: .22rem;
       line-height: .32rem;

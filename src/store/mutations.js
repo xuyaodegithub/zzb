@@ -4,6 +4,9 @@ const mutations={
   },
   SETS_ERVER(state,data){
     state.page.ServiceAgreement=data
+  },
+  CHANG_APP (state, value) {
+    state.page.appOrh5 = value;
   }
 }
 

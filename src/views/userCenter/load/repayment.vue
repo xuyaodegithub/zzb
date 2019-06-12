@@ -1,38 +1,38 @@
 <template>
   <!--  还款界面-->
   <div class="repayment">
-    <div class="delay">
-      <div class="flex j-b a-i">
-        <span>订单号</span>
-        <span>2019010</span>
-      </div>
-      <div class="flex j-b a-i">
-        <span>借款金额</span>
-        <span>500元</span>
-      </div>
-      <div class="flex j-b a-i">
-        <span>延期至：</span>
-        <span>2019年10月10日</span>
-      </div>
-    </div>
+    <!--<div class="delay">-->
+      <!--<div class="flex j-b a-i">-->
+        <!--<span>订单号</span>-->
+        <!--<span>2019010</span>-->
+      <!--</div>-->
+      <!--<div class="flex j-b a-i">-->
+        <!--<span>借款金额</span>-->
+        <!--<span>500元</span>-->
+      <!--</div>-->
+      <!--<div class="flex j-b a-i">-->
+        <!--<span>延期至：</span>-->
+        <!--<span>2019年10月10日</span>-->
+      <!--</div>-->
+    <!--</div>-->
     <!--银行卡-->
     <div class="flex a-i j-b bank" @click="showbank=true">
       <div class="flex a-i">
-        <img :src="bank" alt="">
-        {{selectBank.bankName}}({{selectBank.num | cardNo}})
+        <img :src="selectBank | bankIcon" alt="">
+        {{selectBank.bankName}}({{selectBank.cardNo | cardNo}})
       </div>
       <img src="../../../assets/image/bankRight.png" alt="">
     </div>
     <div class="paymuch">
       <p class="ctitle">
-        应还金额（300.00元）
+        应还金额（{{paybackAmount}}元）
       </p>
       <div class="flex a-i inputDom j-b">
         <div>
           <span>CNY</span>
           <input type="number" v-model="moneyNum" placeholder="请输入还款金额">
         </div>
-        <img src="../../../assets/image/clear.png" alt="" v-show="moneyNum.length>0" @click="moneyNum=''">
+        <img src="../../../assets/image/clear.png" alt="" v-if="moneyNum>0" @click="moneyNum=''">
       </div>
     </div>
     <div class="sureBtn" @click="showcodePopup()">
@@ -46,8 +46,8 @@
         <img src="../../../assets/image/close.png" alt="" @click="showbank=false">
         <h4>选择银行卡</h4>
         <div class="list">
-          <div v-for="(item,index) in banklist" :key="index" class="itemC flex a-i" @click="choseItem(item)">
-            <img src="../../../assets/image/chose.png" alt="">
+          <div v-for="(item,index) in banklist" :key="index" class="itemC flex a-i" @click="choseItem(item,index)">
+            <img src="../../../assets/image/chose.png" alt="" v-if="selectIndex===index" class="chose">
             <img :src="item | bankIcon" alt="" class="icon_i">
             <div>
               <p>{{item.bankName}}</p>
@@ -82,7 +82,7 @@
         <img src="../../../assets/image/error.png" alt="" v-else>
         <p>{{resultObj.playSatus ? '还款成功' : '还款失败'}}</p>
         <p>{{resultObj.message}}</p>
-        <div @click="showResult=false">确定</div>
+        <div @click="toSureresult()">确定</div>
       </div>
     </van-popup>
     <!-- 数字键盘 -->
@@ -100,8 +100,14 @@
 
 <script>
   import jsbank from '@/assets/image/jsbank.png'
-  import jsicon from '@/assets/image/jsicon.png'
-  import zsicon from '@/assets/image/zsicon.png'
+  import initlogo from '@/assets/image/initlogo.png'//默认
+  import jslogo from '@/assets/image/jslogo.png'//建设
+  import gslogo from '@/assets/image/gslogo.png'//工商
+  import jtlogo from '@/assets/image/jtlogo.png'//交通
+  import nylogo from '@/assets/image/nylogo.jpg'//农业
+  import xylogo from '@/assets/image/xylogo.png'//兴业
+  import zglogo from '@/assets/image/zglogo.png'//中国
+  import zslogo from '@/assets/image/zslogo.jpg'//招商
   import gsicon from '@/assets/image/gsicon.png'
   import { PasswordInput, NumberKeyboard, Popup, Toast, Icon  } from 'vant';
   import { getBankList, handleRepayMes, getRepayment, getOrderInfo } from '@/apis/index';
@@ -110,18 +116,20 @@
     name: "repayment",
     data() {
       return {
-        moneyNum:'',
+        moneyNum:+this.$route.query.paybackAmount,
         showbank:false,
         showKeyboard:false,
         showCode:false,
         showResult:false,
-        paybackAmount:this.$route.query.paybackAmount,//需还金额
-        selectBank:{bankCode:'CCB',bankName:'中国建设银行',num:'341125197809157070'},
+        paybackAmount:'',//需还金额
+        selectBank:{bankCode:'',bankName:'',cardNo:''},
         banklist:[
-          {bankCode:'CCB',bankName:'中国建设银行',num:'341125197809157070'},
-          {bankCode:'ICBC',bankName:'中国工商银行',num:'341125197809157070'},
-          {bankCode:'ABC',bankName:'招商银行',num:'341125197809157070'},
+          // {bankCode:'CCB',bankName:'中国建设银行',cardNo:'341125197809157070'},
+          // {bankCode:'ICBC',bankName:'中国工商银行',cardNo:'341125197809157070'},
+          // {bankCode:'ABC',bankName:'农业银行',cardNo:'341125197809157070'},
+          // {bankCode:'CMB',bankName:'招商银行',cardNo:'341125197809157070'},
         ],
+        selectIndex:0,//默认选中第一个银行卡
         verifyCode:'',
         iconRelute:false,
         payorderId:'',//还款订单id
@@ -138,12 +146,17 @@
     },
     filters:{
       cardNo(val){
-        return `**** ${String(val).slice(val.length-4)}`
+        return `**** ${val.slice(val.length-4)}`
       },
       bankIcon(val){
-        if(val.bankCode==='CCB') return jsicon;
-        else if(val.bankCode==='ICBC') return gsicon;
-        else if(val.bankCode==='ABC') return zsicon;
+        if(val.bankCode==='CCB') return jslogo;
+        else if(val.bankCode==='ICBC') return gslogo;
+        else if(val.bankCode==='ABC') return nylogo;
+        else if(val.bankCode==='BOC') return zglogo;
+        else if(val.bankCode==='CMB') return zslogo;
+        else if(val.bankCode==='CIB') return xylogo;
+        else if(val.bankCode==='BCM') return jtlogo;
+        else return initlogo
       },
     },
     mounted() {
@@ -151,20 +164,15 @@
       this.fetchBankList();
     },
     computed: {
-      bank() {
-        if(this.selectBank.bankCode==='CCB') return jsicon;
-        else if(this.selectBank.bankCode==='ICBC') return gsicon;
-        else if(this.selectBank.bankCode==='ABC') return zsicon;
-      },
       orderId () {
         return this.$route.query.orderId;
       },
       phoneNum () {
         return getStore('phoneNum');
       },
-      paybackAmountParam () {
-        return this.$route.query.paybackAmount;
-      },
+      // paybackAmountParam () {
+      //   return this.$route.query.paybackAmount;
+      // },
       canRepay () {
         return +this.moneyNum > 0 && +this.moneyNum <= +this.paybackAmount;
       },
@@ -194,9 +202,10 @@
         // this.showCode=true
         // this.verifyCode=''
       },
-      choseItem(item){
-        this.showbank=false
-        this.selectBank=item
+      choseItem(item,index){
+        this.showbank=false;
+        this.selectIndex=index;
+        this.selectBank=item;
       },//////////////
       // windowResize () {
       //   this.showHeight = document.documentElement.clientHeight;
@@ -229,14 +238,20 @@
       // 立即还款
       fetchRepayment () {
         // this.alreadyPay = true;
+        Toast.loading({
+          mask: true,
+          // message: '',
+          duration:0
+        });
         let cardIdx = this.selectBank['cardIdx'];
         let cardNo = this.selectBank['cardNo'];
         handleRepayMes(
-          this.repayAmount,
+          this.moneyNum,
           cardNo,
           cardIdx,
           this.orderId
         ).then(res=>{
+          Toast.clear()
           if (!res.resultCode) {
             // this.alreadyPay = false;
             let _this = this;
@@ -250,6 +265,8 @@
             Toast(`${res.resultMessage}`);
             this.showCode = false;
           }
+        }).catch(err=>{
+          Toast.clear()
         });
       },
       // 确认还款
@@ -279,8 +296,12 @@
          Toast.clear()
          console.log(err)
        });
-
       },
+      toSureresult(){
+        this.showResult=false
+        if(this.resultObj.playSatus) this.$router.replace('/home')
+        else return
+      }
       // handleCheck (index) {
       //   this.checklist = new Array(this.checklist.length).fill(false);
       //   this.checklist[index] = true;
@@ -385,8 +406,6 @@
   }
   .popup_content{
     position: relative;
-    max-height: 7.5rem;
-    overflow-y: auto;
     padding:.36rem 0 .8rem;
     color: #333333;
     h4{
@@ -406,13 +425,16 @@
     }
     .list{
       padding:0 .35rem ;
+      max-height: 6rem;
+      min-height: 4rem;
+      overflow-y: auto;
       .itemC{
         font-size: .32rem;
         padding: .2rem .28rem .14rem .22rem;
         border-bottom: 1px solid #D8D8D8;
         position: relative;
         margin-bottom: .2rem;
-        & > img:first-child{
+        & > img.chose{
           position: absolute;
           width: .24rem;
           height: .24rem;

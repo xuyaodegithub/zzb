@@ -17,7 +17,6 @@ httpClient.defaults.baseURL = process.env.BASE_URL;
 httpClient.interceptors.request.use(
   config => {
     const token = getCookie('Token');
-    console.log(token);
     token && (config.headers.common['X-ZZD-AUTH'] = token);
     config.headers.common['X-ZZD-AGENT'] = isAndroid;
     // config.headers.post['Content-Type'] = 'application/json; charset=utf-8'
@@ -33,7 +32,7 @@ httpClient.interceptors.response.use(
     const res = response.data;
     if (res.resultCode === 119) {
       router.replace({
-        path: '/'
+        path: '/login'
       });
       return Promise.reject(response);
     } else {

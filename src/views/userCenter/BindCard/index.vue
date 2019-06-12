@@ -11,10 +11,10 @@
         <img src="../../../assets/image/add.png" alt="">添加银行卡
       </div>
       <div class="list">
-          <div v-for="(val,index) in banklist" :key="index" class="item" :style="val.bankCode=='CCB' ? style : (val.bankCode=='ICBC' ? style1 : style2)" @click="updata(val)">
+          <div v-for="(val,index) in banklist" :key="index" class="item" :style="{ backgroundImage:`url(${bankback(val.bankCode)})` }" @click="updata(val)">
             <p>{{val.bankName}}</p>
             <p>储蓄卡</p>
-            <p>{{val.cardNo}}</p>
+            <p>{{val.cardNo | bankFilter}}</p>
           </div>
       </div>
     </div>
@@ -28,36 +28,35 @@
   import js from '@/assets/image/jianshe.png'
   import gs from '@/assets/image/gs.png'
   import ny from '@/assets/image/ny.png'
+  import initback from '@/assets/image/initbank.jpg'
     export default {
         name: "cardList",
       data(){
           return {
             banklist:[
-                {bankCode:'CCB',bankName:'中国建设银行',num:'341125197809157070'},
-                {bankCode:'ICBC',bankName:'中国工商银行',num:'341125197809157070'},
-                {bankCode:'ABC',bankName:'中国农业银行',num:'341125197809157070'},
+                {bankCode:'CCB',bankName:'中国建设银行',cardNo:'341125197809157070'},
+                {bankCode:'ICBC',bankName:'中国工商银行',cardNo:'341125197809157070'},
+                {bankCode:'ABC',bankName:'中国农业银行',cardNo:'341125197809157070'},
+                {bankCode:'ABCs',bankName:'中国农业银行',cardNo:'341125197809157070'},
               ],
-            style:{
-                backgroundImage:`url(${js})`
-            },
-            style1:{
-                backgroundImage:`url(${gs})`
-            },
-            style2:{
-                backgroundImage:`url(${ny})`
-            },
           }
       },
       components:{
 
       },
       mounted(){
-          this.fetchBankList()
+          // this.fetchBankList()
       },
       computed:{
 
       },
       methods:{
+        bankback(val){
+          if(val==='CCB')return js;
+          else if(val==='ICBC')return gs;
+          else if(val==='ABC')return ny;
+          else return initback
+        },
         fetchBankList () {//获取银行卡列表
          getBankList().then(res=>{
            if (!res.resultCode) {
@@ -88,6 +87,7 @@
       margin-top: .4rem;
       /*background-position: center;*/
       background-size: cover;
+      border-radius: .08rem;
       p:nth-child(2){
         font-size: .22rem;
         line-height: .32rem;

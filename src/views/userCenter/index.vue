@@ -66,17 +66,19 @@
           else if(key===2) this.$router.push('/cardList')
         },
         cancatKF(){
-            Dialog.confirm({
-              // title: '',
-              message: '联系客服时，请主动告知您注册时的手机号！',
-              confirmButtonText:'拨打电话',
-              cancelButtonColor:'#999999',
-              confirmButtonColor:'#1E8CFF'
-            }).then(() => {
-              // on confirm
-            }).catch(() => {
-              // on cancel
-            });
+          this.$router.push('/Conact')
+          // Dialog.confirm({
+          //     // title: '',
+          //     message: '联系客服时，请主动告知您注册时的手机号！',
+          //     confirmButtonText:'拨打电话',
+          //     cancelButtonColor:'#999999',
+          //     confirmButtonColor:'#1E8CFF'
+          //   }).then(() => {
+          //     // on confirm
+          //     // this.callphone()
+          //   }).catch(() => {
+          //     // on cancel
+          //   });
           }, // 个人信息
         getUserHomeInfo () {
           getUserHomeInfo().then(res=>{
@@ -84,6 +86,14 @@
               this.userInfo = res.data;
             }
           });
+        },
+        //拨打电话
+        callphone(){
+          let oA=document.createElement('a')
+          oA.href='tel:16605813146'
+          document.body.appendChild(oA);
+          oA.click()
+          oA.style.display='none'
         }
 
       },

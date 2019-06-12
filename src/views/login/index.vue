@@ -46,6 +46,7 @@
       },
       mounted(){
         this.getHistoryPhone()
+        this.getaccessType()
       },
       computed:{
           iscanLogin(){
@@ -53,6 +54,12 @@
           }
       },
       methods:{
+        getaccessType () {
+          let type = this.$route.query.accessType;
+          console.log(type)
+          if (!type) return;
+          this.$store.commit('CHANG_APP', type);
+        },
         gotop(){
           window.scrollTo(0,0)
         },

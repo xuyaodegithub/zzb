@@ -7,6 +7,9 @@ const router = new Router({
   routes: [
     {
       path: '/',
+      redirect:'/login'
+    },{
+      path: '/login',
       name: '登录',
       component:() => import(/* webpackChunkName: "login" */'@/views/login/index')
     },{
@@ -65,6 +68,14 @@ const router = new Router({
       path: '/delay',
       name: '延期',
       component:() => import(/* webpackChunkName: "loadDetail" */'@/views/userCenter/load/delay')
+    },{
+      path: '/Conact',
+      name: '联系客服',
+      component:() => import(/* webpackChunkName: "loadDetail" */'@/views/userCenter/Conact/index')
+    },{
+      path: '/downLoad',
+      name: '下载',
+      component:() => import(/* webpackChunkName: "loadDetail" */'@/views/downLoad/index')
     }
   ],
   scrollBehavior (to, from, savedPosition) {//路由切换时滚轮位置//scrollBehavior 方法接收 to 和 from 路由对象。第三个参数 savedPosition 当且仅当 popstate 导航 (通过浏览器的 前进/后退 按钮触发) 时才可用。

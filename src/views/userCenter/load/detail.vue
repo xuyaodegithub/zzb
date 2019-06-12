@@ -7,17 +7,19 @@
         {{orderstatusMatch[orderInfo.orderStatus]}} <span v-if="['6','10'].indexOf(orderInfo.orderStatus)>-1">已还{{orderInfo.repaidAmount}}</span>
       </div>
     </div>
-    <div class="d-center" v-if="['1','2','4'].indexOf(orderInfo.orderStatus)>-1">
+    <div class="d-center" v-if="['1','2','4','3','12'].indexOf(orderInfo.orderStatus)>-1">
       <img :src="centerIcon" alt="">
       <p>{{orderInfo.orderStatus | statusText}}</p>
     </div>
     <div class="type3" v-else>
         <p>应还金额</p>
         <h4>{{orderInfo.paybackAmount}}</h4>
-      <p v-if="+orderInfo.overdueDay">距还款日{{orderInfo.repayDate}}<span style="color: #ed4630;">已逾期{{orderInfo.overdueDay}}天</span></p>
-      <p v-else-if="!orderInfo.overdueDay && orderInfo.deadline==0">今日就是还款日</span></p>
+      <div v-if="['5','6','9','10','11'].indexOf(orderInfo.orderStatus)>-1">
+        <p v-if="+orderInfo.overdueDay">距还款日{{orderInfo.repayDate}}<span style="color: #ed4630;">已逾期{{orderInfo.overdueDay}}天</span></p>
+        <p v-else-if="!+orderInfo.overdueDay && orderInfo.deadline==0">今日就是还款日</span></p>
+        <p v-else>距还款日{{orderInfo.repayDate}}<span>还剩{{orderInfo.deadline}}天</span></p>
+      </div>
       <p v-else-if="['7','8'].indexOf(orderInfo.orderStatus)>-1">已还款</span></p>
-      <p v-else>距还款日{{orderInfo.repayDate}}<span>还剩{{orderInfo.deadline}}天</span></p>
     </div>
     <div class="d-bottom">
         <p class="flex a-i j-b"><span>订单号</span><span>{{orderInfo.orderNo}}</span></p>
@@ -34,10 +36,20 @@
      <span>到账银行卡</span>
      <span>{{orderInfo.backAccount}}</span>
    </div>
-  <div class="payBtn flex a-i" v-if="['5','9'].indexOf(orderInfo.orderStatus)>-1">
+  <div class="payBtn  a-i" v-if="['5','6','9','10'].indexOf(orderInfo.orderStatus)>-1">
       <div @click="repay()">立即还款</div>
-      <div @click="delayMyself()">我要延期</div>
+      <!--<div @click="delayMyself()">我要延期</div>-->
   </div>
+  <!--审核失败-->
+  <van-popup
+    v-model="failVisi"
+    :close-on-click-overlay="false">
+    <div class="showResult">
+      <img src="../../../assets/image/four1.png" alt="">
+      <p>很遗憾，审核未通过</p>
+      <div @click="failVisi=false">知道了</div>
+    </div>
+  </van-popup>
 </div>
 </template>
 
@@ -53,7 +65,7 @@
   import five from '@/assets/image/bufen.png'
   import overOrder from '@/assets/image/overOrder.png'
   import { orderstatusMatch } from '@/utils/match';
-  // import { Row, Col, PasswordInput, NumberKeyboard, Popup, Dialog, Toast, Icon, Button } from 'vant';
+  import { Popup } from 'vant';
   import { getOrderInfo, loanPostpone } from '@/apis/index';
   import { getStore } from '@/utils/storage.js';
     export default {
@@ -64,13 +76,15 @@
               backgroundImage:`url(${back})`
             },
             orderstatusMatch,
-            failVisi:'',
-            orderInfo: '',
+            failVisi:true,
+            orderInfo: {
+
+            },
 
           }
       },
       components:{
-
+        [Popup.name]:Popup
       },
       mounted(){
         this.fetchLoanInfo()
@@ -108,10 +122,10 @@
           });
         },
         repay(){
-          this.$router.push(`/repayment?orderId=${orderInfo.orderNo}&paybackAmount=${orderInfo.paybackAmount}`)
+          this.$router.push(`/repayment?orderId=${this.orderInfo.orderNo}&paybackAmount=${this.orderInfo.paybackAmount}`)
         },
         delayMyself(){
-          this.$router.push(`/delay?orderId=${orderInfo.orderNo}&paybackAmount=${orderInfo.paybackAmount}`)
+          this.$router.push(`/delay?orderId=${this.orderInfo.orderNo}&paybackAmount=${this.orderInfo.paybackAmount}`)
         },
       },
     }
@@ -195,22 +209,45 @@
     background-color: #ffffff;
   }
   .payBtn{
-    padding: .28rem .8rem;
+    /*padding: .28rem .8rem;*/
+    padding: .28rem .32rem;
     justify-content: center;
-    font-size: .34rem;
-    line-height: .8rem;
+    font-size: .36rem;
+    line-height: .9rem;
     text-align: center;
     color: #fff;
     div{
-      width: 2.6rem;
-      border-radius: 0.04rem;
+      /*width: 2.6rem;*/
+      border-radius: 0.08rem;
     }
     div:first-child{
       background-color: #2F81FF;
-      margin-right: .7rem;
-    }
-    div:last-child{
-      background-color: #C3C4C3;
+      /*margin-right: .7rem;*/
     }
   }
+.showResult{
+  padding: .64rem .6rem .40rem;
+  width: 5.28rem;
+  text-align: center;
+  border-radius: .08rem;
+  & >img {
+    display: block;
+    width: .81rem;
+    height: .88rem;
+    margin: 0 auto .42rem;
+  }
+  p:nth-child(2){
+    font-size: .32rem;
+    line-height: .44rem;
+    margin-bottom: .48rem;
+    color: #777777;
+  }
+  div:last-child{
+    font-size: .36rem;
+    color: #fff;
+    line-height: .9rem;
+    background-color: #2F81FF;
+    border-radius: .08rem;
+  }
+}
 </style>

@@ -206,3 +206,9 @@ export const loanPostpone = (orderId, payAmount, verifyCode) =>
  */
 export const loanPostDetail = productId =>
   http.post('/loan/product-detail', { productId });
+
+/**
+ *个人验证
+ */
+export const selfAuthentication = () =>
+  http.post('/member/user-info/status');

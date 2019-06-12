@@ -5,6 +5,7 @@ const state={
   page:{
     authStatus: 0,
     ServiceAgreement:'',
+    appOrh5: 'h5'
   }
 }
 

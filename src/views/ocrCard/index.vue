@@ -47,6 +47,7 @@
   // import { Uploader } from 'vant';
   import { Uploader, Toast, Loading } from 'vant';
   import { handleOcrPrepare, handleOcrResult } from '@/apis/index';
+  import { getStore } from '@/utils/storage.js';
   const formdata = new FormData();
     export default {
         name: "index",
@@ -68,7 +69,7 @@
       mounted(){},
       computed:{
         productId () {
-          return this.$route.query.productId;
+          return getStore('productId');
         },
         isActive(){
           return this.isdown && this.isup
@@ -129,6 +130,7 @@
               return;
             }
             if (!res.resultCode) {
+              Toast('身份证认证成功')
               this.$router.replace('/selfAuthentication');
               // this.$router.push('/personInfo');
             } else {
