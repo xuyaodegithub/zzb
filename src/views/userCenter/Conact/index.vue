@@ -2,7 +2,7 @@
 <!--  联系客服-->
  <div class="cancat">
     <h4>在线客服</h4>
-   <div>QQ：<span>630206654</span></div>
+   <div>QQ：<span></span></div>
     <p>
       如果你在使用分期淘的过程中有任何疑问，请联系此QQ客服人员，我们会尽快解答您的疑问！
     </p>

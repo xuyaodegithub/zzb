@@ -4,7 +4,7 @@
     <div v-if="banklist.length<1" class="nocard">
       <img src="../../../assets/image/noCard.png" alt="">
       <p>您还未绑定银行卡</p>
-      <div class="btn" @click="addCard()">去绑定</div>
+      <!--<div class="btn" @click="addCard()">去绑定</div>-->
     </div>
     <div v-else>
       <div class="top flex a-i" @click="addCard()">
@@ -34,10 +34,10 @@
       data(){
           return {
             banklist:[
-                {bankCode:'CCB',bankName:'中国建设银行',cardNo:'341125197809157070'},
-                {bankCode:'ICBC',bankName:'中国工商银行',cardNo:'341125197809157070'},
-                {bankCode:'ABC',bankName:'中国农业银行',cardNo:'341125197809157070'},
-                {bankCode:'ABCs',bankName:'中国农业银行',cardNo:'341125197809157070'},
+                // {bankCode:'CCB',bankName:'中国建设银行',cardNo:'341125197809157070'},
+                // {bankCode:'ICBC',bankName:'中国工商银行',cardNo:'341125197809157070'},
+                // {bankCode:'ABC',bankName:'中国农业银行',cardNo:'341125197809157070'},
+                // {bankCode:'ABCs',bankName:'中国农业银行',cardNo:'341125197809157070'},
               ],
           }
       },
@@ -45,7 +45,7 @@
 
       },
       mounted(){
-          // this.fetchBankList()
+          this.fetchBankList()
       },
       computed:{
 

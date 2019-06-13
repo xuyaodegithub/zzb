@@ -6,7 +6,7 @@
             <p>身份认证</p>
             <p>请使用本人身份证认证</p>
           </div>
-          <div class="Authentication_btn" @click="Authentication(1)">
+          <div class="Authentication_btn" @click="Authentication(1)" :style="{opacity:+selfStatusInfo.status>0 ? '0.5' : 1 }">
             立即认证
           </div>
         </div>
@@ -16,7 +16,7 @@
             <p>个人信息</p>
             <p>保证个人信息真实有效</p>
           </div>
-          <div class="Authentication_btn" @click="Authentication(2)">
+          <div class="Authentication_btn" @click="Authentication(2)" :style="{opacity:+selfStatusInfo.status>1 ? '0.5' : 1 }">
             立即认证
           </div>
         </div>
@@ -26,7 +26,7 @@
             <p>银行卡认证</p>
             <p>请绑定您的银行卡</p>
           </div>
-          <div class="Authentication_btn" @click="Authentication(3)">
+          <div class="Authentication_btn" @click="Authentication(3)" :style="{opacity:+selfStatusInfo.status>2 ? '0.5' : 1 }">
             立即认证
           </div>
         </div>
@@ -83,6 +83,7 @@
           })
         },
         nextTo(){
+          if(this.selfStatusInfo.status!=='3') return;
           this.$router.push('/personInfo')
         }
       },

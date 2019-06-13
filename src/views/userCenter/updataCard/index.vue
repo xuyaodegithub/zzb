@@ -7,14 +7,14 @@
           <p>储蓄卡</p>
           <p>{{item.cardNo | bankFilter}}</p>
         </div>
-        <div class="btn" @click="Unbind()">解绑</div>
+        <!--<div class="btn" @click="Unbind()">解绑</div>-->
     </div>
     <div class="flex btn">
       <div style="display:flex;align-items: center;">
         <span style="margin-right: 10px;color: #2F81FF;">设为默认卡</span>
         <van-switch
-          @change="open()"
-          v-model="checked"
+          @input="open"
+          :value="checked"
           size="20px"
           active-color="#2F81FF"
         />
@@ -74,9 +74,15 @@ export default {
         // on cancel
       });
     },
-    open () {
-      if (this.checked) Toast({duration: 500, message: '设置默认成功'});
-      else Toast({duration: 500, message: '取消默认成功'});
+    open (checked) {
+      // if (this.checked) Toast({duration: 500, message: '设置默认成功'});
+      // else Toast({duration: 500, message: '取消默认成功'});
+      Dialog.confirm({
+        title: '提醒',
+        message: '是否切换开关？'
+      }).then(() => {
+        this.checked = checked;
+      });
     }
   },
   mounted () {

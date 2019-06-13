@@ -272,7 +272,7 @@
            if (this.bankCardCount) {
              this.$router.replace(`/signing?usePurposeId=${this.usePurpose.id}`); // 签约页面
            } else {
-             this.$router.replace('/bindCard'); // 绑卡页面
+             this.$router.replace('/selfAuthentication'); // 认证页面
            }
          } else {
            Toast(`${res.resultMessage}`);
