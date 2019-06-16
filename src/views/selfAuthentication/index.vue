@@ -39,7 +39,9 @@
 <script>
   import { selfAuthentication } from '@/apis/index';
   import {  Toast } from 'vant';
-    export default {
+  import { setStore, getStore } from "../../utils/storage";
+
+  export default {
         name: "Authentication",
       data(){
           return {
@@ -60,7 +62,7 @@
             return
           }
             if(key===1){
-              if(this.selfStatusInfo.status==='0') this.$router.push('/ocrCard')
+              if(this.selfStatusInfo.status==='0' || !this.selfStatusInfo.status) this.$router.push('/ocrCard')
               else  Toast('身份已认证,请进行其他认证.');
             }else if(key===2) {
               if(this.selfStatusInfo.status==='1') this.$router.push('/personInfo')
@@ -84,7 +86,8 @@
         },
         nextTo(){
           if(this.selfStatusInfo.status!=='3') return;
-          this.$router.push('/personInfo')
+          let usePurposeId=getStore('loanPurpose')
+          this.$router.replace(`/signing?usePurposeId=${usePurposeId}`)
         }
       },
     }

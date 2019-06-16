@@ -44,6 +44,7 @@
       v-model="showbank">
       <div class="popup_content">
         <img src="../../../assets/image/close.png" alt="" @click="showbank=false">
+        <p class="addCard" @click="addCard()">添加银行卡</p>
         <h4>选择银行卡</h4>
         <div class="list">
           <div v-for="(item,index) in banklist" :key="index" class="itemC flex a-i" @click="choseItem(item,index)">
@@ -60,10 +61,11 @@
     <!--输入验证码-->
     <van-popup
       v-model="showCode"
+      :class="{'showCodePupo': showKeyboard}"
       :close-on-click-overlay="false">
       <div class="showCode">
         <p>输入验证码</p>
-        <p>还款需要短信确认，验证码已 发送至您手机159****8040</p>
+        <p>还款需要短信确认，验证码已 发送至您手机{{phoneNum | mobileFilter}}</p>
         <van-password-input
           :value="verifyCode"
           :mask="false"
@@ -124,10 +126,10 @@
         paybackAmount:'',//需还金额
         selectBank:{bankCode:'',bankName:'',cardNo:''},
         banklist:[
-          // {bankCode:'CCB',bankName:'中国建设银行',cardNo:'341125197809157070'},
-          // {bankCode:'ICBC',bankName:'中国工商银行',cardNo:'341125197809157070'},
-          // {bankCode:'ABC',bankName:'农业银行',cardNo:'341125197809157070'},
-          // {bankCode:'CMB',bankName:'招商银行',cardNo:'341125197809157070'},
+          {bankCode:'CCB',bankName:'中国建设银行',cardNo:'341125197809157070'},
+          {bankCode:'ICBC',bankName:'中国工商银行',cardNo:'341125197809157070'},
+          {bankCode:'ABC',bankName:'农业银行',cardNo:'341125197809157070'},
+          {bankCode:'CMB',bankName:'招商银行',cardNo:'341125197809157070'},
         ],
         selectIndex:0,//默认选中第一个银行卡
         verifyCode:'',
@@ -153,7 +155,7 @@
         else if(val.bankCode==='ICBC') return gslogo;
         else if(val.bankCode==='ABC') return nylogo;
         else if(val.bankCode==='BOC') return zglogo;
-        else if(val.bankCode==='CMB') return zslogo;
+        else if(val.bankCode==='CMBC') return zslogo;
         else if(val.bankCode==='CIB') return xylogo;
         else if(val.bankCode==='BCM') return jtlogo;
         else return initlogo
@@ -170,9 +172,9 @@
       phoneNum () {
         return getStore('phoneNum');
       },
-      // paybackAmountParam () {
-      //   return this.$route.query.paybackAmount;
-      // },
+      paybackAmountParam () {
+        return this.$route.query.paybackAmount;
+      },
       canRepay () {
         return +this.moneyNum > 0 && +this.moneyNum <= +this.paybackAmount;
       },
@@ -185,6 +187,9 @@
       }
     },
     methods: {
+      addCard(){
+        this.$router.push(`/bindCard?orderId=${this.orderId}&paybackAmount=${this.paybackAmountParam}`)
+      },
       onInput (value) {
         this.verifyCode = (this.verifyCode + value).slice(0, 6);
       },
@@ -192,6 +197,7 @@
         this.verifyCode = this.verifyCode.slice(0, this.verifyCode.length - 1);
       },
       showcodePopup(){
+        // this.showCode = true;//验证码弹框
         if (!this.canRepay) {
           Toast('金额不能大于还款金额，且不能为0');
           // this.repayAmount = this.$route.params.paybackAmount
@@ -220,6 +226,8 @@
         getOrderInfo(this.orderId).then(res=>{
           if (!res.resultCode) {
             this.paybackAmount = res.data.paybackAmount;
+          }else{
+            Toast(`${res.resultMessage}`);
           }
         });
       },
@@ -419,9 +427,17 @@
     & > img{
       position: absolute;
       top: .44rem;
-      right: .36rem;
+      left: .36rem;
       width: .3rem;
       height: .3rem;
+    }
+    & > .addCard{
+      position: absolute;
+      font-size: .28rem;
+      line-height: .4rem;
+      top: .38rem;
+      right: .36rem;
+      color: #2F81FF;
     }
     .list{
       padding:0 .35rem ;
@@ -458,6 +474,9 @@
         }
       }
     }
+  }
+  .showCodePupo{
+    margin-top: -2rem;
   }
   .showCode{
     width: 5.28rem;

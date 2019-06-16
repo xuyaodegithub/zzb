@@ -4,9 +4,9 @@
     <div class="userInfo" :style="style">
       <h4>{{userInfo.name}}</h4>
       <p>（{{userInfo.phone}}）</p>
-      <div class="tag">
-        {{userInfo.grade}}
-      </div>
+      <!--<div class="tag">-->
+        <!--{{userInfo.grade}}-->
+      <!--</div>-->
       <div class="flex history j-b a-i">
           <div>
             <p>{{userInfo.repaidAmount}}</p>
@@ -115,7 +115,7 @@
   & > p{
     font-size: .24rem;
     line-height: .34rem;
-    margin-bottom: .06rem;
+    margin-bottom: .9rem;
   }
   .tag{
     display: inline-block;

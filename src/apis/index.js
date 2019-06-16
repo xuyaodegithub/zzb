@@ -212,3 +212,13 @@ export const loanPostDetail = productId =>
  */
 export const selfAuthentication = () =>
   http.post('/member/user-info/status');
+/**
+ *设置默认银行卡
+ */
+export const setdefaultCard = (cardIdx,cardNo) =>
+  http.post('/bank/defaultCard',{ cardIdx, cardNo });
+/**
+ *j解绑银行卡
+ */
+export const releaseCard = (cardIdx,cardNo) =>
+  http.post('/bank/releaseCard',{ cardIdx,cardNo });

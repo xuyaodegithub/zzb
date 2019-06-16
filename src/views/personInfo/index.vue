@@ -20,7 +20,7 @@
       <van-cell
         icon="icon iconfont icon-benzi"
         class="aurora-cell"
-        title="借款用途"
+        title="借款用处"
         is-link
         required
         :value="usePurpose.type ? usePurpose.type : '请选择'" @click="showPicker(1)">
@@ -32,17 +32,17 @@
         left-icon="icon iconfont icon-xingming1"
         v-model="familyMember.name"
         input-align="right"
-        label="直系亲属姓名"
+        label="父亲或母亲姓名"
         placeholder="请输入"
         required
       />
-      <van-cell
-        icon="icon iconfont icon-qunzu"
-        class="aurora-cell"
-        title="关系"
-        is-link
-        :value="familyMember.relationText ? familyMember.relationText : '请选择'"
-        @click="showPicker(2)"/>
+      <!--<van-cell-->
+        <!--icon="icon iconfont icon-qunzu"-->
+        <!--class="aurora-cell"-->
+        <!--title="关系"-->
+        <!--is-link-->
+        <!--:value="familyMember.relationText ? familyMember.relationText : '请选择'"-->
+        <!--@click="showPicker(2)"/>-->
       <van-field
         left-icon="icon iconfont icon-icon--"
         v-model="familyMember.contacts"
@@ -54,22 +54,23 @@
     </van-cell-group>
     <p class="person">紧急联系人</p>
     <van-cell-group class="mar-top20" v-for="(urgent, urgentInd) in urgentArr" :key="urgentInd">
+      <van-cell
+        icon="icon iconfont icon-qunzu"
+        class="aurora-cell"
+        title="与借款人关系"
+        value="同事"
+      />
+      <!--@click="showPicker(3,urgentInd)"-->
+      <!--:value="urgentArr[urgentInd].urgentUserText ?  urgentArr[urgentInd].urgentUserText : '请选择'"-->
+      <!--:label="urgentInd==0 ? '联系人1' : '联系人2'"-->
       <van-field
         v-model="urgent.name"
         left-icon="icon iconfont icon-lianxiren"
         input-align="right"
-        :label="urgentInd==0 ? '联系人1' : '联系人2'"
+        label="姓名"
         required
         placeholder="请输入"
       />
-      <van-cell
-        icon="icon iconfont icon-qunzu"
-        class="aurora-cell"
-        title="关系"
-        is-link
-        :value="urgentArr[urgentInd].urgentUserText ?  urgentArr[urgentInd].urgentUserText : '请选择'"
-        @click="showPicker(3,urgentInd)"
-        />
       <van-field
         v-model="urgent.contacts"
         left-icon="icon iconfont icon-icon--"
@@ -260,7 +261,7 @@
         // debugger
         let {idNum, name} = this.userInfo;
         // 本地存储 loanPurpose
-        // setStore('loanPurpose', this.usePurpose.id);//借款用途
+        setStore('loanPurpose', this.usePurpose.id);//借款用途
        setUserInfo(
           idNum,
           name,
@@ -272,7 +273,7 @@
            if (this.bankCardCount) {
              this.$router.replace(`/signing?usePurposeId=${this.usePurpose.id}`); // 签约页面
            } else {
-             this.$router.replace('/selfAuthentication'); // 认证页面
+             this.$router.replace(`/selfAuthentication`); // 认证页面
            }
          } else {
            Toast(`${res.resultMessage}`);
@@ -297,6 +298,7 @@
             return item.id === this.usePurpose.id;
           })[0];
         }
+        console.log(this.usePurpose,'pppppppppppppppppppp')
         if (this.relatives) {
           this.relatives.map((relItem, index) => {
             if (relItem.relativeType !== '0') { // 直系
@@ -350,7 +352,7 @@
   .personInfo .van-cell--required::before{
     color: #2F81FF;
   }
-  .personInfo  .van-field__control--right{
-
+  .personInfo .van-field__label{
+    max-width:2.1rem;
   }
 </style>

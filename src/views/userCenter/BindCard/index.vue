@@ -12,6 +12,7 @@
       </div>
       <div class="list">
           <div v-for="(val,index) in banklist" :key="index" class="item" :style="{ backgroundImage:`url(${bankback(val.bankCode)})` }" @click="updata(val)">
+            <i v-if="val.isMaster==1">默认卡</i>
             <p>{{val.bankName}}</p>
             <p>储蓄卡</p>
             <p>{{val.cardNo | bankFilter}}</p>
@@ -34,10 +35,10 @@
       data(){
           return {
             banklist:[
-                // {bankCode:'CCB',bankName:'中国建设银行',cardNo:'341125197809157070'},
-                // {bankCode:'ICBC',bankName:'中国工商银行',cardNo:'341125197809157070'},
-                // {bankCode:'ABC',bankName:'中国农业银行',cardNo:'341125197809157070'},
-                // {bankCode:'ABCs',bankName:'中国农业银行',cardNo:'341125197809157070'},
+                // {bankCode:'CCB',bankName:'中国建设银行',cardNo:'341125197809157070',isMaster:0},
+                // {bankCode:'ICBC',bankName:'中国工商银行',cardNo:'341125197809157070',isMaster:1},
+                // {bankCode:'ABC',bankName:'中国农业银行',cardNo:'341125197809157070',isMaster:0},
+                // {bankCode:'ABCs',bankName:'中国农业银行',cardNo:'341125197809157070',isMaster:0},
               ],
           }
       },
@@ -70,7 +71,7 @@
           this.$router.push(`/bindCard?back=list`)
         },
         updata(val){
-          this.$router.push(`/updataCard?cardIdx=${val.cardIdx}`)
+          this.$router.push(`/updataCard?carditem=${JSON.stringify(val)}&num=${this.banklist.length}`)
         }
       },
     }
@@ -88,7 +89,14 @@
       /*background-position: center;*/
       background-size: cover;
       border-radius: .08rem;
-      p:nth-child(2){
+      position: relative;
+      i{
+        position: absolute;
+        right: .6rem;
+        top: .3rem;
+        font-size: .12rem;
+      }
+      p:nth-child(3){
         font-size: .22rem;
         line-height: .32rem;
         margin:.08rem 0 .12rem 0;

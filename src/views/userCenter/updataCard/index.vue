@@ -3,11 +3,11 @@
   <div class="updataCard">
     <div class="item flex" :style="{ backgroundImage:`url(${bankback(item.bankCode)})` }">
         <div>
-          <p>{{item.title}}</p>
+          <p>{{cardItem.bankName}}</p>
           <p>储蓄卡</p>
-          <p>{{item.cardNo | bankFilter}}</p>
+          <p>{{cardItem.cardNo | bankFilter}}</p>
         </div>
-        <!--<div class="btn" @click="Unbind()">解绑</div>-->
+        <div class="btn" @click="Unbind()">解绑</div>
     </div>
     <div class="flex btn">
       <div style="display:flex;align-items: center;">
@@ -27,7 +27,7 @@
 <script>
 // import { orderstatusMatch } from 'utils/match';
 import { Row, Col, PasswordInput, NumberKeyboard, Popup, Dialog, Toast, Icon, Button, Switch } from 'vant';
-// import { getOrderInfo, loanPostpone } from 'apis/index';
+import { setdefaultCard, releaseCard } from '@/apis/index';
 // import { getStore } from 'utils/storage.js';
 import js from '@/assets/image/jianshe.png'
 import gs from '@/assets/image/gs.png'
@@ -49,13 +49,22 @@ export default {
   data () {
     return {
       item:{type:1,title:'中国建设银行',cardNo:'341125197809157070',bankCode:'ICBC'},
-      checked: false,
+      checked: false
     };
   },
   computed: {
-
+    cardItem(){
+      return JSON.parse(this.$route.query.carditem)
+    },
+    cardNum(){
+      return this.$route.query.num
+    }
   },
   methods: {
+    setInit(){
+      if(this.cardItem.isMaster==1) this.checked=true
+      else this.checked=false
+    },
     bankback(val){
       if(val==='CCB')return js;
       else if(val==='ICBC')return gs;
@@ -68,8 +77,19 @@ export default {
         title: '提示',
         message: '确定要解除绑定此银行卡么？'
       }).then(() => {
-        // on confirm
-        _self.$router.go(-1);
+        if(_self.cardNum < 2 ){
+          Toast('只有一张银行卡不可解绑')
+          return
+        }
+        let cardNo = _self.cardItem.cardNo.slice(_self.cardItem.cardNo.length-4)
+        releaseCard(_self.cardItem.cardIdx,_self.cardItem.cardNo).then(res=>{
+          if(!res.resultCode) {
+            if(!res.data.bindStatus){
+              Toast('解绑成功')
+              this.$router.replace('/cardList')
+            } else  Toast(`${res.data.bindMsg}`);
+          } else Toast(`${res.resultMessage}`)
+        })
       }).catch(() => {
         // on cancel
       });
@@ -77,16 +97,31 @@ export default {
     open (checked) {
       // if (this.checked) Toast({duration: 500, message: '设置默认成功'});
       // else Toast({duration: 500, message: '取消默认成功'});
+      if(this.checked){
+        Toast('此卡处于默认状态,无需设置')
+        return
+      }
+      let _self=this
       Dialog.confirm({
         title: '提醒',
-        message: '是否切换开关？'
+        message: '是否设置此卡默认？'
       }).then(() => {
-        this.checked = checked;
+        let cardNo = _self.cardItem.cardNo.slice(_self.cardItem.cardNo.length-4)
+        setdefaultCard(_self.cardItem.cardIdx,_self.cardItem.cardNo).then(res=>{
+              if(!res.resultCode){
+                  if(!res.data.bindStatus){
+                    Toast('设置默认成功')
+                    this.checked = true;
+                  } else  Toast(`${res.data.bindMsg}`);
+              }else Toast(`${res.resultMessage}`)
+        }).catch(err=>{
+          console.log(err)
+        })
       });
     }
   },
   mounted () {
-    // this.fetchLoanInfo();
+    this.setInit()
   }
 };
 </script>

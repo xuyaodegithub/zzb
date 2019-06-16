@@ -99,7 +99,13 @@
       computed:{
           hasback(){
             return this.$route.query.back
-          }
+          },
+        orderId () {
+          return this.$route.query.orderId;
+        },
+        paybackAmountParam () {
+          return this.$route.query.paybackAmount;
+        },
       },
       methods:{
         getUserInfo () {//个人信息
@@ -158,6 +164,9 @@
           });
         },
         fetchConfirmCardMsg(){
+          // console.log(this.$route.query.back)
+          // console.log(this.$route.query.orderId)
+          // console.log(this.$route.query.paybackAmount)
           if(this.personal.mesCode.length<1){
             Toast('请输入验证码');
             return
@@ -182,6 +191,7 @@
                 Toast({type:'success',message:res.data.bindMsg,mask:true,duration:1500});
                 // Toast(`${res.data.bindMsg}`);
                 if(this.hasback) this.$router.replace('/cardList');
+                else if( this.orderId && this.paybackAmountParam )this.$router.replace(`/repayment?orderId=${this.orderId}&paybackAmount=${this.paybackAmountParam}`);
                 else this.$router.replace('/selfAuthentication');
               } else {
                 Toast(`${res.data.bindMsg}`);
