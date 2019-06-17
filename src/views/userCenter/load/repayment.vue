@@ -61,7 +61,7 @@
     <!--输入验证码-->
     <van-popup
       v-model="showCode"
-      :class="{'showCodePupo': showKeyboard}"
+      :class="{'showCodePupo': showCodePupo}"
       :close-on-click-overlay="false">
       <div class="showCode">
         <p>输入验证码</p>
@@ -69,8 +69,10 @@
         <van-password-input
           :value="verifyCode"
           :mask="false"
-          @focus="showKeyboard = true"
+          @click.native="fuoseIn"
         />
+        <input maxlength="6" type="text" v-model="verifyCodes" style="position: absolute;width: 0rem;left: 50%;top:55%;height: 0;border: none;" ref="invals" @input="changeValue" @blur="showCodePupo=false">
+        <!--showKeyboard = true-->
         <div class="codeBtn" :class="{'active' : verifyCode.length<6}" @click="paforMoney()">立即还款</div>
         <img src="../../../assets/image/close.png" alt="" @click="showCode=false">
       </div>
@@ -88,15 +90,15 @@
       </div>
     </van-popup>
     <!-- 数字键盘 -->
-    <van-number-keyboard
-      class="aurora-keyboard"
-      :show="showKeyboard"
-      @input="onInput"
-      @delete="onDelete"
-      :zIndex="9999"
-      close-button-text="完成"
-      @blur="showKeyboard = false"
-    />
+    <!--<van-number-keyboard-->
+      <!--class="aurora-keyboard"-->
+      <!--:show="showKeyboard"-->
+      <!--@input="onInput"-->
+      <!--@delete="onDelete"-->
+      <!--:zIndex="9999"-->
+      <!--close-button-text="完成"-->
+      <!--@blur="showKeyboard = false"-->
+    <!--/>-->
   </div>
 </template>
 
@@ -118,6 +120,8 @@
     name: "repayment",
     data() {
       return {
+        verifyCodes:'',
+        showCodePupo:false,
         moneyNum:+this.$route.query.paybackAmount,
         showbank:false,
         showKeyboard:false,
@@ -155,7 +159,7 @@
         else if(val.bankCode==='ICBC') return gslogo;
         else if(val.bankCode==='ABC') return nylogo;
         else if(val.bankCode==='BOC') return zglogo;
-        else if(val.bankCode==='CMBC') return zslogo;
+        else if(val.bankCode==='CMBCHIN') return zslogo;
         else if(val.bankCode==='CIB') return xylogo;
         else if(val.bankCode==='BCM') return jtlogo;
         else return initlogo
@@ -184,9 +188,24 @@
         if (!newVal) {
           this.verifyCode = '';
         }
+      },
+      verifyCodes(newVal){
+        if(newVal.length>6) this.verifyCode=this.verifyCodes.substring(0,6)
+        else  this.verifyCode=this.verifyCodes
       }
     },
     methods: {
+      fuoseIn(){
+        this.$refs.invals.focus()
+        this.showCodePupo=true
+      },
+      changeValue(){
+        let reg=/^[0-9]*$/
+        console.log(this.verifyCodes)
+        if(this.verifyCodes.length>6) this.verifyCodes=this.verifyCodes.substring(0,6)
+        else this.verifyCodes= this.verifyCodes.replace(/[^\d]/g, "");
+        console.log(this.verifyCodes)
+      },
       addCard(){
         this.$router.push(`/bindCard?orderId=${this.orderId}&paybackAmount=${this.paybackAmountParam}`)
       },
@@ -197,7 +216,7 @@
         this.verifyCode = this.verifyCode.slice(0, this.verifyCode.length - 1);
       },
       showcodePopup(){
-        // this.showCode = true;//验证码弹框
+        this.showCode = true;//验证码弹框
         if (!this.canRepay) {
           Toast('金额不能大于还款金额，且不能为0');
           // this.repayAmount = this.$route.params.paybackAmount
@@ -484,6 +503,12 @@
     text-align: center;
     border-radius: .08rem;
     padding: .48rem .6rem .36rem;
+    position: relative;
+    overflow: hidden;
+    .van-password-input{
+      background-color: #fff;
+      z-index: 22;
+    }
     & > img{
       position: absolute;
       top: .32rem;

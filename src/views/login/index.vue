@@ -13,7 +13,7 @@
         </div>
         <div class="flex a-i j-b">
           <div class="relate codeDiv">
-            <input type="number" placeholder="请输入4位验证码" v-model="code" @blur="gotop()" class="codeInput">
+            <input type="number" placeholder="请输入4位验证码" v-model="code" class="codeInput">
             <img src="../../assets/image/clear.png" alt="" v-show="code.length>0" @click="code=''">
           </div>
           <button @click="sendCode()" :class="{'btnopa' : phone.length!=11 || CountDown>0 }">{{CountDown>0 ? CountDown : '发送验证码'}}</button>

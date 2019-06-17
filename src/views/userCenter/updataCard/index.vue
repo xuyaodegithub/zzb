@@ -81,6 +81,10 @@ export default {
           Toast('只有一张银行卡不可解绑')
           return
         }
+        if(_self.cardItem.isMaster==1){
+          Toast('默认卡不可解绑')
+          return
+        }
         let cardNo = _self.cardItem.cardNo.slice(_self.cardItem.cardNo.length-4)
         releaseCard(_self.cardItem.cardIdx,_self.cardItem.cardNo).then(res=>{
           if(!res.resultCode) {

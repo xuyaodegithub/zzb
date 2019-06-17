@@ -94,7 +94,7 @@
         position: absolute;
         right: .6rem;
         top: .3rem;
-        font-size: .12rem;
+        font-size: .28rem;
       }
       p:nth-child(3){
         font-size: .22rem;

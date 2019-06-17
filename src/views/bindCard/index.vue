@@ -58,6 +58,9 @@
       <p>2.请绑定银行预留手机号码为注册手机号码的银行卡;</p>
       <p>3.请绑定储蓄卡，不支持信用卡;</p>
     </div>
+    <div class="notice-box flex ">
+      <span>温馨提示:</span><span>新绑定的银行卡将作为放款和还款的默认卡，可在我的银行卡管理中手动设置默认卡.</span>
+    </div>
 </div>
 </template>
 
@@ -231,6 +234,14 @@
       line-height: .34rem;
       padding: 0 .32rem;
       color: #777;
+    }
+    .notice-box.flex{
+      padding:0 .6rem 0 .3rem;
+      margin-top: .6rem;
+      color: #E01659;
+      span:first-child{
+        width: 2rem;
+      }
     }
   }
 

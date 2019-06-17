@@ -128,14 +128,14 @@
         urgentArr: [
           {
             name: '',
-            urgentUserText: '',
-            urgentUserType: 5,
+            urgentUserText: '同事',
+            urgentUserType:2,
             contacts: ''
           },
           {
             name: '',
-            urgentUserText: '',
-            urgentUserType: 5,
+            urgentUserText: '同事',
+            urgentUserType:2,
             contacts: ''
           }
         ],
@@ -234,12 +234,12 @@
            return
          }
          console.log(this.familyMember,this.urgentArr,this.checkMobile(this.familyMember.contacts,'直系亲属手机号输入有误'))
-          if(!this.paramsValidate(this.familyMember,'请完善直系亲属信息','urgentUserType')) return
-          if(!this.paramsValidate(this.urgentArr[0],'请完善紧急联系人信息','relativeType')) return
-          if(!this.paramsValidate(this.urgentArr[1],'请完善紧急联系人信息','relativeType')) return
-          if(!this.checkMobile(this.familyMember.contacts,'直系亲属手机号输入有误')) return
-          if(!this.checkMobile(this.urgentArr[0].contacts,'紧急联系人手机号输入有误')) return
-          if(!this.checkMobile(this.urgentArr[1].contacts,'紧急联系人手机号输入有误')) return
+          if(!this.paramsValidate(this.familyMember,'请完善亲属信息','urgentUserType')) return
+          if(!this.paramsValidate(this.urgentArr[0],'请完善同事信息','relativeType')) return
+          if(!this.paramsValidate(this.urgentArr[1],'请完善同事信息','relativeType')) return
+          if(!this.checkMobile(this.familyMember.contacts,'亲属手机号输入有误')) return
+          if(!this.checkMobile(this.urgentArr[0].contacts,'同事手机号输入有误')) return
+          if(!this.checkMobile(this.urgentArr[1].contacts,'同事手机号输入有误')) return
         console.log(222)
         this.setUserInfo()
       },
@@ -250,6 +250,7 @@
         delete _family.urgentUserType;
         urgentArr.map(item => {
           delete item.relativeType;
+          item.urgentUserType='2'
         });
         urgentArr.unshift(_family);
         this.relatives = urgentArr;
