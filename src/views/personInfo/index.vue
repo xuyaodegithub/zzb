@@ -58,7 +58,7 @@
         icon="icon iconfont icon-qunzu"
         class="aurora-cell"
         title="与借款人关系"
-        value="同事"
+        :value="urgentInd == 0 ? '同事' : '同学'"
       />
       <!--@click="showPicker(3,urgentInd)"-->
       <!--:value="urgentArr[urgentInd].urgentUserText ?  urgentArr[urgentInd].urgentUserText : '请选择'"-->
@@ -113,7 +113,10 @@
           // name: '张三',
           // idNum: '12345678999652',
         },
-        usePurpose:{},//借款用途
+        usePurpose:{
+          id:'',
+          tye:''
+        },//借款用途
         loanPurposeOps:[],//贷款用途选项数组
         relativeTypes: [], // 直系联系人关系数组
         userTypes: [], // 紧急联系人关系数组
@@ -296,7 +299,7 @@
           // })[0]['type'];
           // this.personal.text = purposeText;
           this.usePurpose = purposeOptions.filter((item) => {
-            return item.id === this.usePurpose.id;
+            return item.id == this.usePurpose.id;
           })[0];
         }
         console.log(this.usePurpose,'pppppppppppppppppppp')

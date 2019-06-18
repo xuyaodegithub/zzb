@@ -71,7 +71,7 @@
           :mask="false"
           @click.native="fuoseIn"
         />
-        <input maxlength="6" type="text" v-model="verifyCodes" style="position: absolute;width: 0rem;left: 50%;top:55%;height: 0;border: none;" ref="invals" @input="changeValue" @blur="showCodePupo=false">
+        <input maxlength="6" type="number" v-model="verifyCodes" style="position: absolute;width: 0rem;left: 50%;top:55%;height: 0;border: none;" ref="invals" @input="changeValue" @blur="showCodePupo=false">
         <!--showKeyboard = true-->
         <div class="codeBtn" :class="{'active' : verifyCode.length<6}" @click="paforMoney()">立即还款</div>
         <img src="../../../assets/image/close.png" alt="" @click="showCode=false">
@@ -112,6 +112,8 @@
   import xylogo from '@/assets/image/xylogo.png'//兴业
   import zglogo from '@/assets/image/zglogo.png'//中国
   import zslogo from '@/assets/image/zslogo.jpg'//招商
+  import bjlogo from '@/assets/image/bjlogo.jpg'//北京银行
+  import gflogo from '@/assets/image/gflogo.png'//广发银行
   import gsicon from '@/assets/image/gsicon.png'
   import { PasswordInput, NumberKeyboard, Popup, Toast, Icon  } from 'vant';
   import { getBankList, handleRepayMes, getRepayment, getOrderInfo } from '@/apis/index';
@@ -130,10 +132,10 @@
         paybackAmount:'',//需还金额
         selectBank:{bankCode:'',bankName:'',cardNo:''},
         banklist:[
-          {bankCode:'CCB',bankName:'中国建设银行',cardNo:'341125197809157070'},
-          {bankCode:'ICBC',bankName:'中国工商银行',cardNo:'341125197809157070'},
-          {bankCode:'ABC',bankName:'农业银行',cardNo:'341125197809157070'},
-          {bankCode:'CMB',bankName:'招商银行',cardNo:'341125197809157070'},
+          // {bankCode:'CCB',bankName:'中国建设银行',cardNo:'341125197809157070'},
+          // {bankCode:'ICBC',bankName:'中国工商银行',cardNo:'341125197809157070'},
+          // {bankCode:'CGB',bankName:'农业银行',cardNo:'341125197809157070'},
+          // {bankCode:'BCCB',bankName:'招商银行',cardNo:'341125197809157070'},
         ],
         selectIndex:0,//默认选中第一个银行卡
         verifyCode:'',
@@ -162,6 +164,8 @@
         else if(val.bankCode==='CMBCHIN') return zslogo;
         else if(val.bankCode==='CIB') return xylogo;
         else if(val.bankCode==='BCM') return jtlogo;
+        else if(val.bankCode==='BCCB') return bjlogo;
+        else if(val.bankCode==='CGB') return gflogo;
         else return initlogo
       },
     },
@@ -201,9 +205,9 @@
       },
       changeValue(){
         let reg=/^[0-9]*$/
-        console.log(this.verifyCodes)
-        if(this.verifyCodes.length>6) this.verifyCodes=this.verifyCodes.substring(0,6)
-        else this.verifyCodes= this.verifyCodes.replace(/[^\d]/g, "");
+        // console.log(this.verifyCodes)
+        if(this.verifyCodes.length>6) this.verifyCodes=this.verifyCodes.substring(0,6);
+        // else this.verifyCodes= this.verifyCodes.replace(/[^\d]/g, "");
         console.log(this.verifyCodes)
       },
       addCard(){
@@ -216,7 +220,7 @@
         this.verifyCode = this.verifyCode.slice(0, this.verifyCode.length - 1);
       },
       showcodePopup(){
-        this.showCode = true;//验证码弹框
+        // this.showCode = true;//验证码弹框
         if (!this.canRepay) {
           Toast('金额不能大于还款金额，且不能为0');
           // this.repayAmount = this.$route.params.paybackAmount

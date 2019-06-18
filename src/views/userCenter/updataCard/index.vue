@@ -1,7 +1,7 @@
 <template>
 <!--  银行卡编辑解绑-->
   <div class="updataCard">
-    <div class="item flex" :style="{ backgroundImage:`url(${bankback(item.bankCode)})` }">
+    <div class="item flex" :style="{ backgroundImage:`url(${bankback(cardItem.bankCode)})` }">
         <div>
           <p>{{cardItem.bankName}}</p>
           <p>储蓄卡</p>
@@ -48,7 +48,7 @@ export default {
   },
   data () {
     return {
-      item:{type:1,title:'中国建设银行',cardNo:'341125197809157070',bankCode:'ICBC'},
+      // item:{type:1,title:'中国建设银行',cardNo:'341125197809157070',bankCode:'ICBC'},
       checked: false
     };
   },

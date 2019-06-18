@@ -37,8 +37,6 @@
             banklist:[
                 // {bankCode:'CCB',bankName:'中国建设银行',cardNo:'341125197809157070',isMaster:0},
                 // {bankCode:'ICBC',bankName:'中国工商银行',cardNo:'341125197809157070',isMaster:1},
-                // {bankCode:'ABC',bankName:'中国农业银行',cardNo:'341125197809157070',isMaster:0},
-                // {bankCode:'ABCs',bankName:'中国农业银行',cardNo:'341125197809157070',isMaster:0},
               ],
           }
       },

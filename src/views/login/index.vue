@@ -21,7 +21,7 @@
         <div class="loginBtn" :class="{'loginactive' : !iscanLogin}" @click="userLogin()">
           登录
         </div>
-        <p class="XY">登录即表示您同意 <span @click="check()"> 《分期淘服务协议》</span></p>
+        <!--<p class="XY">登录即表示您同意 <span @click="check()"> 《分期淘服务协议》</span></p>-->
       </div>
     </section>
 </template>
