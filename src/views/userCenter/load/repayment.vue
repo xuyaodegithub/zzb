@@ -58,20 +58,19 @@
         </div>
       </div>
     </van-popup>
-    <!--输入验证码-->
+    <!--输入验证码  :class="{'showCodePupo': showCodePupo}"-->
     <van-popup
       v-model="showCode"
-      :class="{'showCodePupo': showCodePupo}"
       :close-on-click-overlay="false">
       <div class="showCode">
         <p>输入验证码</p>
         <p>还款需要短信确认，验证码已 发送至您手机{{phoneNum | mobileFilter}}</p>
-        <van-password-input
-          :value="verifyCode"
-          :mask="false"
-          @click.native="fuoseIn"
-        />
-        <input maxlength="6" type="number" v-model="verifyCodes" style="position: absolute;width: 0rem;left: 50%;top:55%;height: 0;border: none;" ref="invals" @input="changeValue" @blur="showCodePupo=false">
+        <!--<van-password-input-->
+          <!--:value="verifyCode"-->
+          <!--:mask="false"-->
+          <!--@click.native="fuoseIn"-->
+        <!--/>-->
+        <input maxlength="6" type="number" v-model="verifyCode"  ref="invals" @input="changeValue" @blur="showCodePupo=false" @focus="showCodePupo=true">
         <!--showKeyboard = true-->
         <div class="codeBtn" :class="{'active' : verifyCode.length<6}" @click="paforMoney()">立即还款</div>
         <img src="../../../assets/image/close.png" alt="" @click="showCode=false">
@@ -161,9 +160,9 @@
         else if(val.bankCode==='ICBC') return gslogo;
         else if(val.bankCode==='ABC') return nylogo;
         else if(val.bankCode==='BOC') return zglogo;
-        else if(val.bankCode==='CMBCHIN') return zslogo;
+        else if(val.bankCode==='CMBCHINA') return zslogo;
         else if(val.bankCode==='CIB') return xylogo;
-        else if(val.bankCode==='BCM') return jtlogo;
+        else if(val.bankCode==='BOCO') return jtlogo;
         else if(val.bankCode==='BCCB') return bjlogo;
         else if(val.bankCode==='CGB') return gflogo;
         else return initlogo
@@ -193,10 +192,10 @@
           this.verifyCode = '';
         }
       },
-      verifyCodes(newVal){
-        if(newVal.length>6) this.verifyCode=this.verifyCodes.substring(0,6)
-        else  this.verifyCode=this.verifyCodes
-      }
+      // verifyCodes(newVal){
+      //   if(newVal.length>6) this.verifyCode=this.verifyCodes.substring(0,6)
+      //   else  this.verifyCode=this.verifyCodes
+      // }
     },
     methods: {
       fuoseIn(){
@@ -206,9 +205,9 @@
       changeValue(){
         let reg=/^[0-9]*$/
         // console.log(this.verifyCodes)
-        if(this.verifyCodes.length>6) this.verifyCodes=this.verifyCodes.substring(0,6);
+        if(this.verifyCode.length>6) this.verifyCode=this.verifyCode.substring(0,6);
         // else this.verifyCodes= this.verifyCodes.replace(/[^\d]/g, "");
-        console.log(this.verifyCodes)
+        console.log(this.verifyCode)
       },
       addCard(){
         this.$router.push(`/bindCard?orderId=${this.orderId}&paybackAmount=${this.paybackAmountParam}`)
@@ -551,6 +550,17 @@
     }
     .active{
       opacity: .6;
+    }
+    input{
+      display: block;
+      font-size: .42rem;
+      border: none;
+      height: 0.6rem;
+      line-height: .6rem;
+      border-bottom: 1px solid #979797;
+      text-align: center;
+      width: 60%;
+      margin: 0 auto;
     }
   }
   .showResult{

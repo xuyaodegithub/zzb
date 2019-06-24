@@ -123,7 +123,7 @@
         relatives: [], // 关系数组总和
         familyMember:{
           name: '',
-          relationText: '',
+          relationText: '父亲或母亲姓名',
           relativeType: 1,
           contacts: ''
         },
@@ -213,7 +213,6 @@
           //   return
           // }
           if(!params[key] && key!==keycode && key !== 'userId'){
-            console.log(params[key])
               Toast(`${message}`);
               str=false
             break
@@ -302,14 +301,15 @@
             return item.id == this.usePurpose.id;
           })[0];
         }
-        console.log(this.usePurpose,'pppppppppppppppppppp')
+        // console.log(this.usePurpose,'pppppppppppppppppppp')
         if (this.relatives) {
           this.relatives.map((relItem, index) => {
             if (relItem.relativeType !== '0') { // 直系
               this.familyMember = relItem;
-              this.familyMember['relationText'] = relativeTypes.filter((item) => {
-                return item.id === relItem.relativeType;
-              })[0]['type'];
+              this.familyMember['relationText'] = '父亲或母亲姓名'
+              // this.familyMember['relationText'] = relativeTypes.filter((item) => {
+              //   return item.id === relItem.relativeType;
+              // })[0]['type'];
             }
 
             if (relItem.urgentUserType !== '0') {
