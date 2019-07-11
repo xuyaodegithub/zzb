@@ -238,7 +238,7 @@
          console.log(this.familyMember,this.urgentArr,this.checkMobile(this.familyMember.contacts,'直系亲属手机号输入有误'))
           if(!this.paramsValidate(this.familyMember,'请完善亲属信息','urgentUserType')) return
           if(!this.paramsValidate(this.urgentArr[0],'请完善同事信息','relativeType')) return
-          if(!this.paramsValidate(this.urgentArr[1],'请完善同事信息','relativeType')) return
+          if(!this.paramsValidate(this.urgentArr[1],'请完善同学信息','relativeType')) return
           if(!this.checkMobile(this.familyMember.contacts,'亲属手机号输入有误')) return
           if(!this.checkMobile(this.urgentArr[0].contacts,'同事手机号输入有误')) return
           if(!this.checkMobile(this.urgentArr[1].contacts,'同事手机号输入有误')) return

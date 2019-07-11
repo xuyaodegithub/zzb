@@ -93,7 +93,7 @@
     name: "index",
     data() {
       return {
-        showLoad:true,
+        showLoad:false,
         style: {
           backgroundImage: `url(${backTwo})`,
         },

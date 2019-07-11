@@ -1,6 +1,12 @@
 <template>
 <!--  我的-->
 <div class="my">
+  <div class="download flex a-i" v-if="$store.state.page.appOrh5!=='app' && !showLoad">
+    <div>分期淘</div>
+    <p>分期淘 您的首选贷款平台</p>
+    <div class="btnLogo" @click="$router.push('/downLoad')">下载</div>
+    <img src="../../assets/image/close.png" alt=""  @click="showLoad=true">
+  </div>
     <div class="userInfo" :style="style">
       <h4>{{userInfo.name}}</h4>
       <p>（{{userInfo.phone}}）</p>
@@ -47,6 +53,7 @@
         name: "my",
       data(){
           return {
+            showLoad:false,
             style:{
               backgroundImage:`url(${userback})`
             },
@@ -101,6 +108,7 @@
 </script>
 
 <style scoped lang="scss">
+  $fs: #2F81FF;
 .userInfo{
   padding: .8rem .6rem .7rem;
   background-size: cover;
@@ -160,4 +168,32 @@
       margin: 0 auto .18rem;
     }
   }
+.download{
+  padding: .16rem .3rem;
+  background-color: #3A383B;
+  font-size: .28rem;
+  color: #fff;
+  text-align: center;
+  & > div:first-child{
+    width: .88rem;
+    line-height: .88rem;
+    background-color: $fs;
+    margin-right: .24rem;
+    font-size: .24rem;
+    border-radius: 0.08rem;
+  }
+  .btnLogo{
+    border-radius: 0.08rem;
+    margin:0 1rem 0 .42rem;
+    line-height: .44rem;
+    width: .96rem;
+    background-color: $fs;
+    color: #fff;
+  }
+  & > img{
+    width: .24rem;
+    height: .24rem;
+    /*border: 1px solid #fff;*/
+  }
+}
 </style>
