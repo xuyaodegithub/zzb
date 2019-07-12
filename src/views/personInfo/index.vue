@@ -241,7 +241,7 @@
           if(!this.paramsValidate(this.urgentArr[1],'请完善同学信息','relativeType')) return
           if(!this.checkMobile(this.familyMember.contacts,'亲属手机号输入有误')) return
           if(!this.checkMobile(this.urgentArr[0].contacts,'同事手机号输入有误')) return
-          if(!this.checkMobile(this.urgentArr[1].contacts,'同事手机号输入有误')) return
+          if(!this.checkMobile(this.urgentArr[1].contacts,'同学手机号输入有误')) return
         console.log(222)
         this.setUserInfo()
       },
