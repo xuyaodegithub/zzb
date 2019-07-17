@@ -60,6 +60,7 @@
         <div class="crilce" :style="style">
             <p>借款金额</p>
             <h4>{{currentProduct.loanAmount}}</h4>
+<!--            <h4>90000.00</h4>-->
         </div>
         <div class="flex a-i j-b bottom">
           <div>
@@ -267,7 +268,7 @@
         font-size: .28rem;
         line-height: .4rem;
         color: #333;
-        padding: .9rem 1.04rem .56rem;
+        padding: .9rem 0 .56rem;
         text-align: center;
         p{
           margin-bottom: .1rem;
