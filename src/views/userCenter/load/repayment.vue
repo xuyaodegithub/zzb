@@ -258,7 +258,13 @@
         getBankList().then(res=>{
           if (!res.resultCode) {
             this.banklist = res.data.bankCards;
-            this.selectBank = res.data.bankCards[0];
+            // this.selectBank = res.data.bankCards[0];
+            res.data.bankCards.map((item,index)=>{
+              if(item.isMaster==1){
+                this.selectBank=item;
+                this.selectIndex=index;
+              }
+            })
             // let len = this.banklist.length;
             // this.checklist = new Array(len).fill(false);
             // this.checklist[0] = true;

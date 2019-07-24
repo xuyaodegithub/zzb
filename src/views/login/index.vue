@@ -4,9 +4,8 @@
       <div class="top_login">
         <img src="../../assets/image/login.png" alt="">
       </div>
-      <!--<div class="logo">分期淘</div>-->
       <div class="content">
-        <h4>分期淘</h4>
+        <h4>芬奇淘</h4>
         <div class="relate">
           <input type="number" class="phone" placeholder="请输入手机号" v-model="phone" maxlength="11" @input="changeValve()">
           <img src="../../assets/image/clear.png" alt="" v-show="phone.length>0" @click="phone=''">
@@ -21,7 +20,7 @@
         <div class="loginBtn" :class="{'loginactive' : !iscanLogin}" @click="userLogin()">
           登录
         </div>
-        <!--<p class="XY">登录即表示您同意 <span @click="check()"> 《分期淘服务协议》</span></p>-->
+        <!--<p class="XY">登录即表示您同意 <span @click="check()"> 《芬奇淘服务协议》</span></p>-->
       </div>
     </section>
 </template>

@@ -1,8 +1,8 @@
 <template>
     <div class="downLoad">
-      <img src="../../assets/image/top.jpg" alt="" class="aurora-box-top">
+      <img src="../../assets/image/top.png" alt="" class="aurora-box-top">
       <a href="https://xmvip.vip/fenqitao">
-        <img src="../../assets/image/cneter.png" alt="">
+        <img src="../../assets/image/center.png" alt="">
       </a>
       <div class="said">
         <h4>
