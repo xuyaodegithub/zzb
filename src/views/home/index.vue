@@ -2,8 +2,8 @@
   <section>
     <!--<header-sub></header-sub>-->
     <div class="download flex a-i" v-if="$store.state.page.appOrh5!=='app' && !showLoad">
-      <div>分期淘</div>
-      <p>分期淘 您的首选贷款平台</p>
+      <div>芬奇淘</div>
+      <p>芬奇淘 您的首选贷款平台</p>
         <div class="btnLogo" @click="$router.push('/downLoad')">下载</div>
       <img src="../../assets/image/close.png" alt=""  @click="showLoad=true">
     </div>
